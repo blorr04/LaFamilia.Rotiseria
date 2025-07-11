@@ -1,3 +1,186 @@
+// Variables globales
+let menuItems = [];
+let cart = [];
+let total = 0;
+
+// Elementos del DOM
+const menuGrid = document.getElementById('menuGrid');
+const cartItems = document.getElementById('cartItems');
+const totalAmount = document.getElementById('totalAmount');
+const customOrder = document.getElementById('customOrder');
+const deliveryTime = document.getElementById('deliveryTime');
+const customerName = document.getElementById('customerName');
+const customerPhone = document.getElementById('customerPhone');
+const customerEmail = document.getElementById('customerEmail');
+const customerAddress = document.getElementById('customerAddress');
+const submitOrder = document.getElementById('submitOrder');
+const confirmationModal = document.getElementById('confirmationModal');
+const orderId = document.getElementById('orderId');
+const closeModal = document.getElementById('closeModal');
+const loadingSpinner = document.getElementById('loadingSpinner');
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+    loadMenu();
+    setupEventListeners();
+});
+
+// Cargar menú desde el servidor
+async function loadMenu() {
+    try {
+        const response = await fetch('/api/menu');
+        menuItems = await response.json();
+        renderMenu();
+    } catch (error) {
+        console.error('Error cargando menú:', error);
+        showError('Error cargando el menú. Por favor, recarga la página.');
+    }
+}
+
+// Renderizar menú
+function renderMenu() {
+    menuGrid.innerHTML = '';
+    menuItems.forEach(item => {
+        const menuItem = document.createElement('div');
+        menuItem.className = 'menu-item';
+        menuItem.dataset.id = item.id;
+
+        menuItem.innerHTML = `
+            <h3>${item.name}</h3>
+            <div class="price">$${item.price.toFixed(2)}</div>
+            <div class="category">${item.category}</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                <span class="quantity-display" id="qty-${item.id}">0</span>
+                <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+            </div>
+        `;
+
+        menuGrid.appendChild(menuItem);
+    });
+}
+
+// Configurar event listeners
+function setupEventListeners() {
+    // Botón de envío
+    submitOrder.addEventListener('click', handleOrderSubmission);
+
+    // Cerrar modal
+    closeModal.addEventListener('click', function() {
+        confirmationModal.style.display = 'none';
+        resetForm();
+    });
+
+    // Cerrar modal con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && confirmationModal.style.display === 'block') {
+            confirmationModal.style.display = 'none';
+            resetForm();
+        }
+    });
+
+    // Actualizar total cuando cambie el pedido manual
+    customOrder.addEventListener('input', updateTotal);
+}
+
+// Aumentar cantidad
+function increaseQuantity(itemId) {
+    const item = menuItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const existingItem = cart.find(i => i.id === itemId);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ id: itemId, quantity: 1 });
+    }
+
+    updateQuantityDisplay(itemId);
+    updateCart();
+    updateTotal();
+}
+
+// Disminuir cantidad
+function decreaseQuantity(itemId) {
+    const existingItem = cart.find(i => i.id === itemId);
+    if (!existingItem) return;
+
+    if (existingItem.quantity > 1) {
+        existingItem.quantity--;
+    } else {
+        cart = cart.filter(i => i.id !== itemId);
+    }
+
+    updateQuantityDisplay(itemId);
+    updateCart();
+    updateTotal();
+}
+
+// Actualizar display de cantidad
+function updateQuantityDisplay(itemId) {
+    const display = document.getElementById(`qty-${itemId}`);
+    const item = cart.find(i => i.id === itemId);
+    const quantity = item ? item.quantity : 0;
+
+    display.textContent = quantity;
+
+    // Actualizar estilo del item
+    const menuItem = document.querySelector(`[data-id="${itemId}"]`);
+    if (quantity > 0) {
+        menuItem.classList.add('selected');
+    } else {
+        menuItem.classList.remove('selected');
+    }
+}
+
+// Actualizar carrito
+function updateCart() {
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="empty-cart">No hay productos seleccionados</p>';
+        return;
+    }
+
+    cartItems.innerHTML = '';
+
+    cart.forEach(item => {
+        const menuItem = menuItems.find(mi => mi.id === item.id);
+        if (!menuItem) return;
+
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+
+        cartItem.innerHTML = `
+            <div class="cart-item-info">
+                <div class="cart-item-name">${menuItem.name}</div>
+                <div class="cart-item-price">$${menuItem.price.toFixed(2)} x ${item.quantity}</div>
+            </div>
+            <div class="cart-item-total">$${(menuItem.price * item.quantity).toFixed(2)}</div>
+        `;
+
+        cartItems.appendChild(cartItem);
+    });
+}
+
+// Actualizar total
+function updateTotal() {
+    total = 0;
+
+    // Sumar productos del carrito
+    cart.forEach(item => {
+        const menuItem = menuItems.find(mi => mi.id === item.id);
+        if (menuItem) {
+            total += menuItem.price * item.quantity;
+        }
+    });
+
+    // Sumar cargo por pedido manual
+    if (customOrder.value.trim()) {
+        total += 5.00;
+    }
+
+    totalAmount.textContent = total.toFixed(2);
+}
+
 // Validar formulario
 function validateForm() {
     const errors = [];
@@ -25,6 +208,17 @@ function validateForm() {
     }
 
     return errors;
+}
+
+// Validar email
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Mostrar errores
+function showError(message) {
+    alert(message); // Puedes mejorar esto con notificaciones visuales si lo deseas
 }
 
 // Manejar envío del pedido
@@ -92,4 +286,28 @@ async function handleOrderSubmission() {
         loadingSpinner.style.display = 'none';
         submitOrder.disabled = false;
     }
+}
+
+// Resetear formulario
+function resetForm() {
+    // Limpiar carrito
+    cart = [];
+    updateCart();
+    updateTotal();
+
+    // Resetear cantidades
+    menuItems.forEach(item => {
+        updateQuantityDisplay(item.id);
+    });
+
+    // Limpiar formulario
+    customOrder.value = '';
+    deliveryTime.value = '';
+    customerName.value = '';
+    customerPhone.value = '';
+    customerEmail.value = '';
+    customerAddress.value = '';
+
+    // Habilitar botón
+    submitOrder.disabled = false;
 }
