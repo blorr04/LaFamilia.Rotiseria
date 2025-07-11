@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>�� Sistema de Pedidos</title>
+    <title>🍕 La Familia Rotiseria</title>
     <link rel="stylesheet" href="/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -37,16 +37,16 @@
             </div>
         </section>
 
-        <!-- Pedido Personalizado -->
+        <!-- Pedido Manual -->
         <section class="custom-order-section">
-            <h2><i class="fas fa-edit"></i> Pedido Personalizado</h2>
+            <h2><i class="fas fa-edit"></i> Pedido Manual</h2>
             <div class="custom-order-container">
                 <textarea 
                     id="customOrder" 
-                    placeholder="Escribe aquí tu pedido personalizado..."
+                    placeholder="Escribe aquí tu pedido y/o cualquier cosa importante..."
                     rows="3"
                 ></textarea>
-                <small>Los pedidos personalizados tienen un cargo adicional de $5.00</small>
+                <small>Los pedidos manuales tienen un cargo adicional de $5.00</small>
             </div>
         </section>
 
@@ -54,51 +54,40 @@
         <section class="delivery-section">
             <h2><i class="fas fa-clock"></i> Horario de Entrega</h2>
             <div class="delivery-container">
-                <select id="deliveryTime" required>
-                    <option value="">Selecciona un horario</option>
-                    <option value="30 minutos">30 minutos</option>
-                    <option value="1 hora">1 hora</option>
-                    <option value="1 hora 30 minutos">1 hora 30 minutos</option>
-                    <option value="2 horas">2 horas</option>
-                    <option value="3 horas">3 horas</option>
-                    <option value="Especificar horario">Especificar horario</option>
-                </select>
-                
-                <div id="customTimeContainer" class="custom-time-container" style="display: none;">
-                    <input 
-                        type="text" 
-                        id="customTime" 
-                        placeholder="Ej: Mañana a las 10:00, Tarde a las 15:30..."
-                    >
-                </div>
+                <input 
+                    type="text" 
+                    id="deliveryTime" 
+                    placeholder="Ej: 20:00, 20:30, 21:15, etc." 
+                    required
+                >
             </div>
         </section>
 
         <!-- Información del Cliente -->
-        <section class="customer-section">
-            <h2><i class="fas fa-user"></i> Información de Contacto</h2>
-            <div class="customer-form">
-                <div class="form-group">
-                    <label for="customerName">Nombre completo *</label>
-                    <input type="text" id="customerName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerPhone">Teléfono *</label>
-                    <input type="tel" id="customerPhone" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerEmail">Email *</label>
-                    <input type="email" id="customerEmail" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerAddress">Dirección de entrega</label>
-                    <textarea id="customerAddress" rows="2" placeholder="Dirección completa para la entrega"></textarea>
-                </div>
-            </div>
-        </section>
+<section class="customer-section">
+    <h2><i class="fas fa-user"></i> Información de Contacto</h2>
+    <div class="customer-form">
+        <div class="form-group">
+            <label for="customerName">Nombre completo *</label>
+            <input type="text" id="customerName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="customerPhone">Teléfono <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
+            <input type="tel" id="customerPhone">
+        </div>
+        
+        <div class="form-group">
+            <label for="customerEmail">Email <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
+            <input type="email" id="customerEmail">
+        </div>
+        
+        <div class="form-group">
+            <label for="customerAddress">Dirección de entrega *</label>
+            <textarea id="customerAddress" rows="2" placeholder="Dirección completa para la entrega" required></textarea>
+        </div>
+    </div>
+</section>
 
         <!-- Botón de Envío -->
         <section class="submit-section">
