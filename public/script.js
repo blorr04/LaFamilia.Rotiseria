@@ -18,6 +18,7 @@ const confirmationModal = document.getElementById('confirmationModal');
 const orderId = document.getElementById('orderId');
 const closeModal = document.getElementById('closeModal');
 const loadingSpinner = document.getElementById('loadingSpinner');
+const confirmationEmailMsg = document.getElementById('confirmationEmailMsg');
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
@@ -37,26 +38,52 @@ async function loadMenu() {
     }
 }
 
-// Renderizar menú
+// Renderizar menú agrupado por categorías
 function renderMenu() {
     menuGrid.innerHTML = '';
+    
+    // Agrupar productos por categoría
+    const categories = {};
     menuItems.forEach(item => {
-        const menuItem = document.createElement('div');
-        menuItem.className = 'menu-item';
-        menuItem.dataset.id = item.id;
+        if (!categories[item.category]) {
+            categories[item.category] = [];
+        }
+        categories[item.category].push(item);
+    });
 
-        menuItem.innerHTML = `
-            <h3>${item.name}</h3>
-            <div class="price">$${item.price.toFixed(2)}</div>
-            <div class="category">${item.category}</div>
-            <div class="quantity-controls">
-                <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
-                <span class="quantity-display" id="qty-${item.id}">0</span>
-                <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
-            </div>
-        `;
+    // Renderizar cada categoría
+    Object.keys(categories).forEach(category => {
+        const categorySection = document.createElement('div');
+        categorySection.className = 'category-section';
+        
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.className = 'category-title';
+        categoryTitle.textContent = category;
+        categorySection.appendChild(categoryTitle);
 
-        menuGrid.appendChild(menuItem);
+        const categoryGrid = document.createElement('div');
+        categoryGrid.className = 'category-grid';
+
+        categories[category].forEach(item => {
+            const menuItem = document.createElement('div');
+            menuItem.className = 'menu-item';
+            menuItem.dataset.id = item.id;
+
+            menuItem.innerHTML = `
+                <h4>${item.name}</h4>
+                <div class="price">$${item.price.toFixed(2)}</div>
+                <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                    <span class="quantity-display" id="qty-${item.id}">0</span>
+                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                </div>
+            `;
+
+            categoryGrid.appendChild(menuItem);
+        });
+
+        categorySection.appendChild(categoryGrid);
+        menuGrid.appendChild(categorySection);
     });
 }
 
@@ -119,6 +146,8 @@ function decreaseQuantity(itemId) {
 // Actualizar display de cantidad
 function updateQuantityDisplay(itemId) {
     const display = document.getElementById(`qty-${itemId}`);
+    if (!display) return;
+    
     const item = cart.find(i => i.id === itemId);
     const quantity = item ? item.quantity : 0;
 
@@ -126,10 +155,12 @@ function updateQuantityDisplay(itemId) {
 
     // Actualizar estilo del item
     const menuItem = document.querySelector(`[data-id="${itemId}"]`);
-    if (quantity > 0) {
-        menuItem.classList.add('selected');
-    } else {
-        menuItem.classList.remove('selected');
+    if (menuItem) {
+        if (quantity > 0) {
+            menuItem.classList.add('selected');
+        } else {
+            menuItem.classList.remove('selected');
+        }
     }
 }
 
@@ -173,9 +204,9 @@ function updateTotal() {
         }
     });
 
-    // Sumar cargo por pedido manual
+    // Sumar cargo por pedido manual (si se implementa)
     if (customOrder.value.trim()) {
-        total += 5.00;
+        // total += 5.00; // Descomenta si quieres cobrar por pedido manual
     }
 
     totalAmount.textContent = total.toFixed(2);
@@ -190,19 +221,20 @@ function validateForm() {
         errors.push('Debes seleccionar al menos un producto o escribir un pedido manual');
     }
 
-    // Validar horario de entrega (input de texto)
+    // Validar horario de entrega
     if (!deliveryTime.value.trim()) {
         errors.push('Debes ingresar un horario de entrega');
     }
 
-    // Validar información del cliente
+    // Validar información del cliente (solo nombre y dirección obligatorios)
     if (!customerName.value.trim()) {
         errors.push('El nombre es obligatorio');
     }
     if (!customerAddress.value.trim()) {
         errors.push('La dirección es obligatoria');
     }
-    // Teléfono y email son opcionales, pero si se ingresa email, validar formato
+
+    // Validar email solo si se ingresa
     if (customerEmail.value.trim() && !isValidEmail(customerEmail.value)) {
         errors.push('El email no tiene un formato válido');
     }
@@ -218,7 +250,7 @@ function isValidEmail(email) {
 
 // Mostrar errores
 function showError(message) {
-    alert(message); // Puedes mejorar esto con notificaciones visuales si lo deseas
+    alert(message); // Puedes mejorar esto con notificaciones visuales
 }
 
 // Manejar envío del pedido
@@ -236,7 +268,6 @@ async function handleOrderSubmission() {
 
     try {
         // Preparar datos del pedido
-        // Enviamos los productos con nombre y precio para que el backend pueda armar el detalle correctamente
         const items = cart.map(item => {
             const menuItem = menuItems.find(mi => mi.id === item.id);
             return menuItem ? {
@@ -273,6 +304,14 @@ async function handleOrderSubmission() {
         if (result.success) {
             // Mostrar confirmación
             orderId.textContent = result.orderId;
+            
+            // Mostrar/ocultar mensaje de email según si se ingresó
+            if (customerEmail.value.trim()) {
+                confirmationEmailMsg.style.display = 'block';
+            } else {
+                confirmationEmailMsg.style.display = 'none';
+            }
+            
             confirmationModal.style.display = 'block';
         } else {
             showError(result.error || 'Error al enviar el pedido');

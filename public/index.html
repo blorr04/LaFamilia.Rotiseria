@@ -39,14 +39,14 @@
 
         <!-- Pedido Manual -->
         <section class="custom-order-section">
-            <h2><i class="fas fa-edit"></i> Pedido Manual</h2>
+            <h2><i class="fas fa-edit"></i> Pedido manual <span style="font-weight:normal; color:#888;">(opcional)</span></h2>
             <div class="custom-order-container">
                 <textarea 
                     id="customOrder" 
-                    placeholder="Escribe aquí tu pedido y/o cualquier cosa importante..."
+                    placeholder="Escribe aquí tu pedido y/o cualquier cosa importante (opcional)..."
                     rows="3"
                 ></textarea>
-                            </div>
+            </div>
         </section>
 
         <!-- Información de Entrega -->
@@ -63,30 +63,27 @@
         </section>
 
         <!-- Información del Cliente -->
-<section class="customer-section">
-    <h2><i class="fas fa-user"></i> Información de Contacto</h2>
-    <div class="customer-form">
-        <div class="form-group">
-            <label for="customerName">Nombre completo *</label>
-            <input type="text" id="customerName" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="customerPhone">Teléfono <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
-            <input type="tel" id="customerPhone">
-        </div>
-        
-        <div class="form-group">
-            <label for="customerEmail">Email <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
-            <input type="email" id="customerEmail">
-        </div>
-        
-        <div class="form-group">
-            <label for="customerAddress">Dirección de entrega *</label>
-            <textarea id="customerAddress" rows="2" placeholder="Dirección completa para la entrega" required></textarea>
-        </div>
-    </div>
-</section>
+        <section class="customer-section">
+            <h2><i class="fas fa-user"></i> Información de Contacto</h2>
+            <div class="customer-form">
+                <div class="form-group">
+                    <label for="customerName">Nombre completo <span style="color:red">*</span></label>
+                    <input type="text" id="customerName" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Teléfono <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
+                    <input type="tel" id="customerPhone" autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <label for="customerEmail">Email <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
+                    <input type="email" id="customerEmail" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Dirección de entrega <span style="color:red">*</span></label>
+                    <textarea id="customerAddress" rows="2" placeholder="Dirección completa para la entrega" required autocomplete="street-address"></textarea>
+                </div>
+            </div>
+        </section>
 
         <!-- Botón de Envío -->
         <section class="submit-section">
@@ -96,14 +93,14 @@
         </section>
 
         <!-- Modal de Confirmación -->
-        <div id="confirmationModal" class="modal">
+        <div id="confirmationModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3><i class="fas fa-check-circle"></i> Pedido Enviado</h3>
                 </div>
                 <div class="modal-body">
                     <p>¡Tu pedido ha sido enviado correctamente!</p>
-                    <p>Recibirás una confirmación por email.</p>
+                    <p id="confirmationEmailMsg" style="display:none;">Recibirás una confirmación por email.</p>
                     <p>ID del pedido: <strong id="orderId"></strong></p>
                 </div>
                 <div class="modal-footer">
