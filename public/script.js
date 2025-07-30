@@ -227,7 +227,30 @@ function isValidEmail(email) {
 
 // Mostrar errores
 function showError(message) {
-    alert(message); // Puedes mejorar esto con notificaciones visuales
+    // Crear un modal de error más visible
+    const errorModal = document.createElement('div');
+    errorModal.className = 'modal';
+    errorModal.style.display = 'block';
+    errorModal.style.zIndex = '3000';
+    
+    errorModal.innerHTML = `
+        <div class="modal-content" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <div class="modal-header" style="background: #f44336; color: white;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+            </div>
+            <div class="modal-body">
+                <p style="color: #d32f2f; font-size: 16px;">${message}</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="btn-secondary">Cerrar</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(errorModal);
+    
+    // También mostrar en consola para debugging
+    console.error('Error mostrado al usuario:', message);
 }
 
 // Manejar envío del pedido
@@ -284,7 +307,17 @@ async function handleOrderSubmission() {
 
     } catch (error) {
         console.error('Error enviando pedido:', error);
-        showError('Error de conexión. Por favor, intenta nuevamente.');
+        
+        // Mensaje de error más específico
+        let errorMessage = 'Error de conexión. Por favor, intenta nuevamente.';
+        
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            errorMessage = '🚫 El servicio de pedidos no está disponible en este momento. Por favor, intenta más tarde o contacta al restaurante directamente.';
+        } else if (error.message.includes('timeout')) {
+            errorMessage = '⏰ Tiempo de espera agotado. El servicio puede estar ocupado. Intenta nuevamente.';
+        }
+        
+        showError(errorMessage);
     } finally {
         // Ocultar loading
         loadingSpinner.style.display = 'none';
