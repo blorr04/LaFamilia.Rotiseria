@@ -49,19 +49,6 @@
             </div>
         </section>
 
-        <!-- Información de Entrega -->
-        <section class="delivery-section">
-            <h2><i class="fas fa-clock"></i> Horario de Entrega</h2>
-            <div class="delivery-container">
-                <input 
-                    type="text" 
-                    id="deliveryTime" 
-                    placeholder="Ej: 20:00, 20:30, 21:15, etc." 
-                    required
-                >
-            </div>
-        </section>
-
         <!-- Información del Cliente -->
         <section class="customer-section">
             <h2><i class="fas fa-user"></i> Información de Contacto</h2>
@@ -69,14 +56,6 @@
                 <div class="form-group">
                     <label for="customerName">Nombre completo <span style="color:red">*</span></label>
                     <input type="text" id="customerName" required autocomplete="name">
-                </div>
-                <div class="form-group">
-                    <label for="customerPhone">Teléfono <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
-                    <input type="tel" id="customerPhone" autocomplete="tel">
-                </div>
-                <div class="form-group">
-                    <label for="customerEmail">Email <span style="font-weight:normal; color:#888;">(opcional, solo para conocer el estado del envío)</span></label>
-                    <input type="email" id="customerEmail" autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label for="customerAddress">Dirección de entrega <span style="color:red">*</span></label>
@@ -100,7 +79,6 @@
                 </div>
                 <div class="modal-body">
                     <p>¡Tu pedido ha sido enviado correctamente!</p>
-                    <p id="confirmationEmailMsg" style="display:none;">Recibirás una confirmación por email.</p>
                     <p>ID del pedido: <strong id="orderId"></strong></p>
                 </div>
                 <div class="modal-footer">

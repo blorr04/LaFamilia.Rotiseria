@@ -8,17 +8,13 @@ const menuGrid = document.getElementById('menuGrid');
 const cartItems = document.getElementById('cartItems');
 const totalAmount = document.getElementById('totalAmount');
 const customOrder = document.getElementById('customOrder');
-const deliveryTime = document.getElementById('deliveryTime');
 const customerName = document.getElementById('customerName');
-const customerPhone = document.getElementById('customerPhone');
-const customerEmail = document.getElementById('customerEmail');
 const customerAddress = document.getElementById('customerAddress');
 const submitOrder = document.getElementById('submitOrder');
 const confirmationModal = document.getElementById('confirmationModal');
 const orderId = document.getElementById('orderId');
 const closeModal = document.getElementById('closeModal');
 const loadingSpinner = document.getElementById('loadingSpinner');
-const confirmationEmailMsg = document.getElementById('confirmationEmailMsg');
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
@@ -221,22 +217,12 @@ function validateForm() {
         errors.push('Debes seleccionar al menos un producto o escribir un pedido manual');
     }
 
-    // Validar horario de entrega
-    if (!deliveryTime.value.trim()) {
-        errors.push('Debes ingresar un horario de entrega');
-    }
-
     // Validar información del cliente (solo nombre y dirección obligatorios)
     if (!customerName.value.trim()) {
         errors.push('El nombre es obligatorio');
     }
     if (!customerAddress.value.trim()) {
         errors.push('La dirección es obligatoria');
-    }
-
-    // Validar email solo si se ingresa
-    if (customerEmail.value.trim() && !isValidEmail(customerEmail.value)) {
-        errors.push('El email no tiene un formato válido');
     }
 
     return errors;
@@ -281,11 +267,8 @@ async function handleOrderSubmission() {
         const orderData = {
             items,
             customOrder: customOrder.value.trim(),
-            deliveryTime: deliveryTime.value.trim(),
             customerInfo: {
                 name: customerName.value.trim(),
-                phone: customerPhone.value.trim(),
-                email: customerEmail.value.trim(),
                 address: customerAddress.value.trim()
             }
         };
@@ -304,14 +287,6 @@ async function handleOrderSubmission() {
         if (result.success) {
             // Mostrar confirmación
             orderId.textContent = result.orderId;
-            
-            // Mostrar/ocultar mensaje de email según si se ingresó
-            if (customerEmail.value.trim()) {
-                confirmationEmailMsg.style.display = 'block';
-            } else {
-                confirmationEmailMsg.style.display = 'none';
-            }
-            
             confirmationModal.style.display = 'block';
         } else {
             showError(result.error || 'Error al enviar el pedido');
@@ -341,10 +316,7 @@ function resetForm() {
 
     // Limpiar formulario
     customOrder.value = '';
-    deliveryTime.value = '';
     customerName.value = '';
-    customerPhone.value = '';
-    customerEmail.value = '';
     customerAddress.value = '';
 
     // Habilitar botón

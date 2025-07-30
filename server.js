@@ -89,11 +89,11 @@ app.get('/api/menu', (req, res) => {
 // Procesar pedido
 app.post('/api/order', async (req, res) => {
   try {
-    const { items, customOrder, deliveryTime, customerInfo } = req.body;
+    const { items, customOrder, customerInfo } = req.body;
     
     // Validar datos
-    if (!customerInfo.name || !customerInfo.phone || !customerInfo.email) {
-      return res.status(400).json({ error: 'Información del cliente incompleta' });
+    if (!customerInfo.name || !customerInfo.address) {
+      return res.status(400).json({ error: 'Nombre y dirección son obligatorios' });
     }
 
     if (!items.length && !customOrder) {
@@ -128,13 +128,9 @@ app.post('/api/order', async (req, res) => {
       
       <h3>💰 Total: $${total.toFixed(2)}</h3>
       
-      <h3>⏰ Horario de Entrega: ${deliveryTime}</h3>
-      
       <h3>👤 Información del Cliente:</h3>
       <p><strong>Nombre:</strong> ${customerInfo.name}</p>
-      <p><strong>Teléfono:</strong> ${customerInfo.phone}</p>
-      <p><strong>Email:</strong> ${customerInfo.email}</p>
-      <p><strong>Dirección:</strong> ${customerInfo.address || 'No especificada'}</p>
+      <p><strong>Dirección:</strong> ${customerInfo.address}</p>
       
       <hr>
       <p><em>Pedido recibido el ${new Date().toLocaleString('es-ES')}</em></p>
@@ -149,31 +145,6 @@ app.post('/api/order', async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-
-    // Enviar confirmación al cliente
-    const customerEmailContent = `
-      <h2>✅ Pedido Confirmado</h2>
-      <p>Hola ${customerInfo.name},</p>
-      <p>Hemos recibido tu pedido y lo estamos procesando.</p>
-      
-      <h3>📋 Resumen del Pedido:</h3>
-      <pre>${orderDetails}</pre>
-      
-      <h3>💰 Total: $${total.toFixed(2)}</h3>
-      <h3>⏰ Horario de Entrega: ${deliveryTime}</h3>
-      
-      <p>Te contactaremos pronto para confirmar los detalles de entrega.</p>
-      <p>¡Gracias por tu pedido!</p>
-    `;
-
-    const customerMailOptions = {
-      from: process.env.EMAIL_USER || 'tu-email@gmail.com',
-      to: customerInfo.email,
-      subject: '✅ Confirmación de Pedido',
-      html: customerEmailContent
-    };
-
-    await transporter.sendMail(customerMailOptions);
 
     res.json({ 
       success: true, 

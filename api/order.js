@@ -5,15 +5,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const { items, customOrder, deliveryTime, customerInfo } = req.body;
+  const { items, customOrder, customerInfo } = req.body;
 
   // Validar datos básicos
   if (!customerInfo?.name?.trim() || !customerInfo?.address?.trim()) {
     return res.status(400).json({ error: 'Nombre y dirección son obligatorios' });
-  }
-
-  if (!deliveryTime?.trim()) {
-    return res.status(400).json({ error: 'Horario de entrega es obligatorio' });
   }
 
   // Debe haber al menos un producto o un pedido manual
@@ -54,23 +50,16 @@ export default async function handler(req, res) {
   // Email para el restaurante
   const restaurantEmailContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #d32f2f;">�� Nuevo Pedido Recibido</h2>
+      <h2 style="color: #d32f2f;">🍕 Nuevo Pedido Recibido</h2>
       <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h3 style="color: #1976d2;">📋 Detalles del Pedido:</h3>
         <pre style="background-color: white; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-family: inherit;">${orderDetails}</pre>
-        <h3 style="color: #388e3c;">�� Total: $${total.toFixed(2)}</h3>
-      </div>
-      
-      <div style="background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
-        <h3 style="color: #1976d2;">⏰ Horario de Entrega:</h3>
-        <p style="font-size: 18px; font-weight: bold;">${deliveryTime}</p>
+        <h3 style="color: #388e3c;">💰 Total: $${total.toFixed(2)}</h3>
       </div>
       
       <div style="background-color: #fff3e0; padding: 20px; border-radius: 8px; margin: 20px 0;">
-        <h3 style="color: #f57c00;">�� Información del Cliente:</h3>
+        <h3 style="color: #f57c00;">👤 Información del Cliente:</h3>
         <p><strong>Nombre:</strong> ${customerInfo.name}</p>
-        <p><strong>Teléfono:</strong> ${customerInfo.phone || 'No proporcionado'}</p>
-        <p><strong>Email:</strong> ${customerInfo.email || 'No proporcionado'}</p>
         <p><strong>Dirección:</strong> ${customerInfo.address}</p>
       </div>
       
@@ -98,39 +87,6 @@ export default async function handler(req, res) {
       subject: `🍕 Nuevo Pedido - ${customerInfo.name} (${orderId})`,
       html: restaurantEmailContent
     });
-
-    // Confirmación al cliente solo si hay email
-    if (customerInfo.email?.trim()) {
-      const customerEmailContent = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #388e3c;">✅ Pedido Confirmado</h2>
-          <p>Hola <strong>${customerInfo.name}</strong>,</p>
-          <p>Hemos recibido tu pedido y lo estamos procesando.</p>
-          
-          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #1976d2;">�� Resumen del Pedido:</h3>
-            <pre style="background-color: white; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-family: inherit;">${orderDetails}</pre>
-            <h3 style="color: #388e3c;">�� Total: $${total.toFixed(2)}</h3>
-          </div>
-          
-          <div style="background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #1976d2;">⏰ Horario de Entrega:</h3>
-            <p style="font-size: 18px; font-weight: bold;">${deliveryTime}</p>
-          </div>
-          
-          <p>Te contactaremos pronto para confirmar los detalles de entrega.</p>
-          <p><strong>ID del Pedido:</strong> ${orderId}</p>
-          <p style="margin-top: 30px;">¡Gracias por tu pedido!</p>
-        </div>
-      `;
-
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: customerInfo.email,
-        subject: '✅ Confirmación de Pedido - La Familia Rotiseria',
-        html: customerEmailContent
-      });
-    }
 
     res.status(200).json({
       success: true,
