@@ -3,7 +3,34 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-require('dotenv').config();
+
+// Configurar dotenv con más opciones de debug
+const result = require('dotenv').config({ 
+  path: path.join(__dirname, '.env'),
+  debug: true 
+});
+
+console.log('🔍 Debug - Resultado de dotenv:', result);
+
+// Configuración directa como fallback
+if (!process.env.EMAIL_USER) {
+  process.env.EMAIL_USER = 'lafamilia.rotiseria2@gmail.com';
+  console.log('⚠️  Usando configuración directa para EMAIL_USER');
+}
+if (!process.env.EMAIL_PASS) {
+  process.env.EMAIL_PASS = 'fwpttjmoxqhzniib';
+  console.log('⚠️  Usando configuración directa para EMAIL_PASS');
+}
+if (!process.env.PORT) {
+  process.env.PORT = '3001';
+  console.log('⚠️  Usando configuración directa para PORT');
+}
+
+// Debug: Verificar si las variables se están leyendo
+console.log('🔍 Debug - Variables de entorno:');
+console.log('   EMAIL_USER:', process.env.EMAIL_USER ? 'Configurado' : 'NO CONFIGURADO');
+console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? 'Configurado' : 'NO CONFIGURADO');
+console.log('   PORT:', process.env.PORT || 'No configurado');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
