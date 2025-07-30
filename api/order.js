@@ -87,16 +87,17 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // Configurar transporter con configuración mejorada para Gmail
     const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
-
-    // Verificar la conexión del transporter
-    await transporter.verify();
 
     // Enviar email al restaurante
     await transporter.sendMail({
@@ -105,6 +106,8 @@ module.exports = async function handler(req, res) {
       subject: `🍕 Nuevo Pedido - ${customerInfo.name} (${orderId})`,
       html: restaurantEmailContent
     });
+
+    console.log('✅ Email enviado correctamente a:', process.env.EMAIL_USER);
 
     res.status(200).json({
       success: true,
@@ -119,7 +122,11 @@ module.exports = async function handler(req, res) {
     let errorMessage = 'Error al procesar el pedido. Por favor, intenta nuevamente.';
     
     if (error.code === 'EAUTH') {
-      errorMessage = 'Error de autenticación del email. Por favor, contacta al administrador.';
+      errorMessage = 'Error de autenticación del email. Verifica las credenciales de Gmail.';
+      console.error('🔐 Error de autenticación Gmail. Verifica:');
+      console.error('   - Verificación en dos pasos activada');
+      console.error('   - Contraseña de aplicación generada');
+      console.error('   - Credenciales correctas en .env');
     } else if (error.code === 'ECONNECTION') {
       errorMessage = 'Error de conexión. Por favor, intenta nuevamente.';
     }
