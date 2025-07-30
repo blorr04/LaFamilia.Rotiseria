@@ -25,56 +25,87 @@ const transporter = nodemailer.createTransport({
 
 // Datos del menú (puedes modificar estos productos)
 const menuItems = [
-  // ⭐ PROMO 1: Pizzanesa + Papas (Descuento)
-  { id: 101, name: "Pizzanesa de Pollo + Papas", price: 16000, category: "PROMO 1", promo: true },
-  { id: 102, name: "Pizzanesa de Carne + Papas", price: 16000, category: "PROMO 1", promo: true },
-  { id: 103, name: "Explosiva de Pollo + Papas", price: 22000, category: "PROMO 1", promo: true },
-  { id: 104, name: "Explosiva de Carne + Papas", price: 24000, category: "PROMO 1", promo: true },
+  // ⭐ PAPAS
+  { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS" },
+  { id: 2, name: "Papas Grandes", price: 6000, category: "PAPAS" },
+  { id: 3, name: "Papas Grandes con Cheddar", price: 7000, category: "PAPAS" },
 
-  // ⭐ PROMOCIONES DESTACADAS (Combos)
-  { id: 201, name: "2 Hamburguesas + 2 Papas (PROMO 2)", price: 15000, category: "PROMO", promo: true },
-  { id: 202, name: "Torpedo + Papas + Carlito (PROMO 3)", price: 15000, category: "PROMO", promo: true },
-  { id: 203, name: "Pizza de Muzzarella + 6 Empanadas (PROMO 4)", price: 14000, category: "PROMO", promo: true },
+  // 🍔 HAMBURGUESA
+  { id: 4, name: "Hamburguesa Común + Papas", price: 7000, category: "HAMBURGUESA" },
+  { id: 5, name: "Hamburguesa Especial + Papas", price: 8500, category: "HAMBURGUESA" },
 
-  // PAPAS
-  { id: 1, name: "Papas Chicas", price: 3500, category: "Papas" },
-  { id: 2, name: "Papas Grandes", price: 5000, category: "Papas" },
-  { id: 3, name: "Papas con Cheddar", price: 6000, category: "Papas" },
+  // 🌭 TORPEDO
+  { id: 6, name: "Torpedo Común", price: 7500, category: "TORPEDO" },
+  { id: 7, name: "Torpedo con Hamburguesa", price: 9000, category: "TORPEDO" },
+  { id: 8, name: "Torpedo con Suprema", price: 9000, category: "TORPEDO" },
+  { id: 9, name: "Torpedo con Milanesa", price: 10000, category: "TORPEDO" },
+  { id: 10, name: "Torpedo con Milanesa + Papas Extra", price: 12000, category: "TORPEDO" },
 
-  // HAMBURGUESA
-  { id: 4, name: "Hamburguesa Común + Papas", price: 6000, category: "Hamburguesa" },
-  { id: 5, name: "Hamburguesa Especial + Papas", price: 7500, category: "Hamburguesa" },
+  // 🥪 CARLITO
+  { id: 11, name: "Carlito Común", price: 6500, category: "CARLITO" },
+  { id: 12, name: "Carlito Especial", price: 7500, category: "CARLITO" },
+  { id: 13, name: "Carlito de Pollo", price: 8000, category: "CARLITO" },
+  { id: 14, name: "Carlipizza", price: 8000, category: "CARLITO" },
 
-  // TORPEDO
-  { id: 6, name: "Torpedo Común", price: 7000, category: "Torpedo" },
-  { id: 7, name: "Torpedo con Hamburguesa", price: 8000, category: "Torpedo" },
-  { id: 8, name: "Torpedo con Suprema", price: 8500, category: "Torpedo" },
-  { id: 9, name: "Torpedo con Milanesa", price: 8500, category: "Torpedo" },
+  // 🍕 PIZZANESA + PAPAS (Para 2 personas)
+  { id: 15, name: "Pizzanesa de Pollo + Papas (Para 2)", price: 18000, category: "PIZZANESA + PAPAS" },
+  { id: 16, name: "Pizzanesa de Carne + Papas (Para 2)", price: 20000, category: "PIZZANESA + PAPAS" },
+  { id: 17, name: "Explosiva de Pollo + Papas (Para 2)", price: 22000, category: "PIZZANESA + PAPAS" },
+  { id: 18, name: "Explosiva de Carne + Papas (Para 2)", price: 24000, category: "PIZZANESA + PAPAS" },
 
-  // CARLITO
-  { id: 10, name: "Carlito Común", price: 6000, category: "Carlito" },
-  { id: 11, name: "Carlito Especial", price: 7000, category: "Carlito" },
-  { id: 12, name: "Carlito de Pollo", price: 8000, category: "Carlito" },
+  // 🍕 PIZZANESA + PAPAS (Para 4 personas)
+  { id: 19, name: "Pizzanesa de Pollo + Papas (Para 4)", price: 20000, category: "PIZZANESA + PAPAS" },
+  { id: 20, name: "Pizzanesa de Carne + Papas (Para 4)", price: 24000, category: "PIZZANESA + PAPAS" },
+  { id: 21, name: "Explosiva de Pollo + Papas (Para 4)", price: 24000, category: "PIZZANESA + PAPAS" },
+  { id: 22, name: "Explosiva de Carne + Papas (Para 4)", price: 26000, category: "PIZZANESA + PAPAS" },
 
-  // EMPANADAS
-  { id: 13, name: "Empanada (Unidad)", price: 1500, category: "Empanadas" },
-  { id: 14, name: "Empanadas (Docena)", price: 16000, category: "Empanadas" },
-  { id: 15, name: "Empanada de Carne Dulce", price: 1500, category: "Empanadas" },
-  { id: 16, name: "Empanada de Carne Salada", price: 1500, category: "Empanadas" },
-  { id: 17, name: "Empanada de Jamón y Queso", price: 1500, category: "Empanadas" },
-  { id: 18, name: "Empanada de Pollo", price: 1500, category: "Empanadas" },
-  { id: 19, name: "Empanada de Verdura", price: 1500, category: "Empanadas" },
-  { id: 20, name: "Empanada de Humita", price: 1500, category: "Empanadas" },
+  // 🥟 EMPANADAS
+  { id: 23, name: "Empanada (Unidad)", price: 1500, category: "EMPANADAS" },
+  { id: 24, name: "Empanadas (Docena)", price: 16000, category: "EMPANADAS" },
+  { id: 25, name: "Empanada de Carne Dulce", price: 1500, category: "EMPANADAS" },
+  { id: 26, name: "Empanada de Carne Salada", price: 1500, category: "EMPANADAS" },
+  { id: 27, name: "Empanada de Jamón y Queso", price: 1500, category: "EMPANADAS" },
+  { id: 28, name: "Empanada de Pollo", price: 1500, category: "EMPANADAS" },
+  { id: 29, name: "Empanada de Verdura", price: 1500, category: "EMPANADAS" },
+  { id: 30, name: "Empanada de Humita", price: 1500, category: "EMPANADAS" },
 
-  // PIZZA
-  { id: 21, name: "Pizza Muzzarella (4 porciones)", price: 5000, category: "Pizza" },
-  { id: 22, name: "Pizza Muzzarella (8 porciones)", price: 9000, category: "Pizza" },
-  { id: 23, name: "Pizza Especial (4 porciones)", price: 6500, category: "Pizza" },
-  { id: 24, name: "Pizza Especial (8 porciones)", price: 13000, category: "Pizza" },
-  { id: 25, name: "Pizza Napolitana (4 porciones)", price: 6500, category: "Pizza" },
-  { id: 26, name: "Pizza Napolitana (8 porciones)", price: 13000, category: "Pizza" },
-  { id: 27, name: "Pizza Pollo a la Crema (4 porciones)", price: 7500, category: "Pizza" },
-  { id: 28, name: "Pizza Pollo a la Crema (8 porciones)", price: 14000, category: "Pizza" }
+  // 🍕 PIZZA (MOLDE) - 4 porciones
+  { id: 31, name: "Pizza Muzzarella (molde, 4 porciones)", price: 5000, category: "PIZZA MOLDE" },
+  { id: 32, name: "Pizza Especial (molde, 4 porciones)", price: 6500, category: "PIZZA MOLDE" },
+  { id: 33, name: "Pizza Napolitana (molde, 4 porciones)", price: 6500, category: "PIZZA MOLDE" },
+  { id: 34, name: "Pizza Pollo a la Crema (molde, 4 porciones)", price: 7500, category: "PIZZA MOLDE" },
+  { id: 35, name: "Pizza Roquefort (molde, 4 porciones)", price: 6500, category: "PIZZA MOLDE" },
+  { id: 36, name: "Pizza Explosiva (molde, 4 porciones)", price: 8000, category: "PIZZA MOLDE" },
+
+  // 🍕 PIZZA (MOLDE) - 8 porciones
+  { id: 37, name: "Pizza Muzzarella (molde, 8 porciones)", price: 8500, category: "PIZZA MOLDE" },
+  { id: 38, name: "Pizza Especial (molde, 8 porciones)", price: 10000, category: "PIZZA MOLDE" },
+  { id: 39, name: "Pizza Napolitana (molde, 8 porciones)", price: 12000, category: "PIZZA MOLDE" },
+  { id: 40, name: "Pizza Pollo a la Crema (molde, 8 porciones)", price: 14000, category: "PIZZA MOLDE" },
+  { id: 41, name: "Pizza Roquefort (molde, 8 porciones)", price: 12000, category: "PIZZA MOLDE" },
+  { id: 42, name: "Pizza Explosiva (molde, 8 porciones)", price: 16000, category: "PIZZA MOLDE" },
+
+  // 🍕 PIZZA (PARRILLA) - 6 porciones
+  { id: 43, name: "Pizza Muzzarella (parrilla, 6 porciones)", price: 5500, category: "PIZZA PARRILLA" },
+  { id: 44, name: "Pizza Especial (parrilla, 6 porciones)", price: 7000, category: "PIZZA PARRILLA" },
+  { id: 45, name: "Pizza Napolitana (parrilla, 6 porciones)", price: 7000, category: "PIZZA PARRILLA" },
+  { id: 46, name: "Pizza Pollo a la Crema (parrilla, 6 porciones)", price: 8000, category: "PIZZA PARRILLA" },
+  { id: 47, name: "Pizza Roquefort (parrilla, 6 porciones)", price: 7000, category: "PIZZA PARRILLA" },
+  { id: 48, name: "Pizza Explosiva (parrilla, 6 porciones)", price: 9500, category: "PIZZA PARRILLA" },
+
+  // 🍕 PIZZA (PARRILLA) - 12 porciones
+  { id: 49, name: "Pizza Muzzarella (parrilla, 12 porciones)", price: 9000, category: "PIZZA PARRILLA" },
+  { id: 50, name: "Pizza Especial (parrilla, 12 porciones)", price: 12000, category: "PIZZA PARRILLA" },
+  { id: 51, name: "Pizza Napolitana (parrilla, 12 porciones)", price: 14000, category: "PIZZA PARRILLA" },
+  { id: 52, name: "Pizza Pollo a la Crema (parrilla, 12 porciones)", price: 15000, category: "PIZZA PARRILLA" },
+  { id: 53, name: "Pizza Roquefort (parrilla, 12 porciones)", price: 14000, category: "PIZZA PARRILLA" },
+  { id: 54, name: "Pizza Explosiva (parrilla, 12 porciones)", price: 18000, category: "PIZZA PARRILLA" },
+
+  // 🥪 LOMITO
+  { id: 55, name: "Lomito Simple", price: 8500, category: "LOMITO" },
+  { id: 56, name: "Lomito Especial", price: 9000, category: "LOMITO" },
+  { id: 57, name: "Lomito Super", price: 10000, category: "LOMITO" },
+  { id: 58, name: "Lomito Super + Papas Extra", price: 12000, category: "LOMITO" }
 ];
 // Rutas
 app.get('/', (req, res) => {
