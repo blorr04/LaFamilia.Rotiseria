@@ -7,7 +7,6 @@ let total = 0;
 const menuGrid = document.getElementById('menuGrid');
 const cartItems = document.getElementById('cartItems');
 const totalAmount = document.getElementById('totalAmount');
-const customOrder = document.getElementById('customOrder');
 const customerName = document.getElementById('customerName');
 const customerAddress = document.getElementById('customerAddress');
 const submitOrder = document.getElementById('submitOrder');
@@ -101,9 +100,6 @@ function setupEventListeners() {
             resetForm();
         }
     });
-
-    // Actualizar total cuando cambie el pedido manual
-    customOrder.addEventListener('input', updateTotal);
 }
 
 // Aumentar cantidad
@@ -200,11 +196,6 @@ function updateTotal() {
         }
     });
 
-    // Sumar cargo por pedido manual (si se implementa)
-    if (customOrder.value.trim()) {
-        // total += 5.00; // Descomenta si quieres cobrar por pedido manual
-    }
-
     totalAmount.textContent = total.toFixed(2);
 }
 
@@ -212,9 +203,9 @@ function updateTotal() {
 function validateForm() {
     const errors = [];
 
-    // Validar productos o pedido manual
-    if (cart.length === 0 && !customOrder.value.trim()) {
-        errors.push('Debes seleccionar al menos un producto o escribir un pedido manual');
+    // Validar productos
+    if (cart.length === 0) {
+        errors.push('Debes seleccionar al menos un producto');
     }
 
     // Validar información del cliente (solo nombre y dirección obligatorios)
@@ -266,7 +257,6 @@ async function handleOrderSubmission() {
 
         const orderData = {
             items,
-            customOrder: customOrder.value.trim(),
             customerInfo: {
                 name: customerName.value.trim(),
                 address: customerAddress.value.trim()
@@ -315,7 +305,6 @@ function resetForm() {
     });
 
     // Limpiar formulario
-    customOrder.value = '';
     customerName.value = '';
     customerAddress.value = '';
 

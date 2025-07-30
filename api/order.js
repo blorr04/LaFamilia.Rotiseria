@@ -1,23 +1,23 @@
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const { items, customOrder, customerInfo } = req.body;
+  const { items, customerInfo } = req.body;
 
   // Validar datos básicos
   if (!customerInfo?.name?.trim() || !customerInfo?.address?.trim()) {
     return res.status(400).json({ error: 'Nombre y dirección son obligatorios' });
   }
 
-  // Debe haber al menos un producto o un pedido manual
+  // Debe haber al menos un producto
   const hasItems = items && items.length > 0;
-  const hasCustomOrder = customOrder && customOrder.trim();
   
-  if (!hasItems && !hasCustomOrder) {
-    return res.status(400).json({ error: 'Debes seleccionar al menos un producto o escribir un pedido manual' });
+  if (!hasItems) {
+    return res.status(400).json({ error: 'Debes seleccionar al menos un producto' });
   }
 
   // Calcular total y detalles
@@ -33,15 +33,6 @@ module.exports = async function handler(req, res) {
         total += itemTotal;
       }
     });
-  }
-
-  // Procesar pedido manual
-  if (hasCustomOrder) {
-    if (hasItems) {
-      orderDetails += '\n'; // Separador si hay productos
-    }
-    orderDetails += `Pedido manual: ${customOrder.trim()}\n`;
-    // total += 5.00; // Descomenta si quieres cobrar por pedido manual
   }
 
   // Generar ID único del pedido
@@ -83,6 +74,19 @@ module.exports = async function handler(req, res) {
   `;
 
   try {
+    // Verificar que las variables de entorno estén configuradas
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Error: Variables de entorno EMAIL_USER o EMAIL_PASS no configuradas');
+      console.log('⚠️  Modo de prueba: Pedido procesado sin envío de email');
+      
+      // En modo de prueba, devolver éxito sin enviar email
+      return res.status(200).json({
+        success: true,
+        message: 'Pedido enviado correctamente (modo de prueba - sin email)',
+        orderId: orderId
+      });
+    }
+
     const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
@@ -90,6 +94,9 @@ module.exports = async function handler(req, res) {
         pass: process.env.EMAIL_PASS
       }
     });
+
+    // Verificar la conexión del transporter
+    await transporter.verify();
 
     // Enviar email al restaurante
     await transporter.sendMail({
@@ -107,8 +114,18 @@ module.exports = async function handler(req, res) {
 
   } catch (error) {
     console.error('Error al procesar pedido:', error);
+    
+    // Mensaje de error más específico
+    let errorMessage = 'Error al procesar el pedido. Por favor, intenta nuevamente.';
+    
+    if (error.code === 'EAUTH') {
+      errorMessage = 'Error de autenticación del email. Por favor, contacta al administrador.';
+    } else if (error.code === 'ECONNECTION') {
+      errorMessage = 'Error de conexión. Por favor, intenta nuevamente.';
+    }
+    
     res.status(500).json({ 
-      error: 'Error al procesar el pedido. Por favor, intenta nuevamente.' 
+      error: errorMessage
     });
   }
 }

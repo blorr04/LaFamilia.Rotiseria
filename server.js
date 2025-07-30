@@ -120,14 +120,14 @@ app.get('/api/menu', (req, res) => {
 // Procesar pedido
 app.post('/api/order', async (req, res) => {
   try {
-    const { items, customOrder, customerInfo } = req.body;
+    const { items, customerInfo } = req.body;
     
     // Validar datos
     if (!customerInfo.name || !customerInfo.address) {
       return res.status(400).json({ error: 'Nombre y dirección son obligatorios' });
     }
 
-    if (!items.length && !customOrder) {
+    if (!items.length) {
       return res.status(400).json({ error: 'No hay productos seleccionados' });
     }
 
@@ -143,11 +143,6 @@ app.post('/api/order', async (req, res) => {
           orderDetails += `${menuItem.name} x${item.quantity} - $${(menuItem.price * item.quantity).toFixed(2)}\n`;
         }
       });
-    }
-
-    if (customOrder) {
-      orderDetails += `\nPedido personalizado: ${customOrder}\n`;
-      total += 5.00; // Cargo adicional por pedido personalizado
     }
 
     // Crear contenido del email
@@ -192,12 +187,25 @@ app.post('/api/order', async (req, res) => {
 
   } catch (error) {
     console.error('Error al procesar pedido:', error);
-    res.status(500).json({ error: 'Error al procesar el pedido' });
+    
+    // Mensaje de error más específico
+    let errorMessage = 'Error al procesar el pedido. Por favor, intenta nuevamente.';
+    
+    if (error.code === 'EAUTH') {
+      errorMessage = 'Error de autenticación del email. Por favor, contacta al administrador.';
+    } else if (error.code === 'ECONNECTION') {
+      errorMessage = 'Error de conexión. Por favor, intenta nuevamente.';
+    }
+    
+    res.status(500).json({ error: errorMessage });
   }
 });
 
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`📧 Configuración de email:`);
+  console.log(`   - EMAIL_USER: ${process.env.EMAIL_USER ? 'Configurado' : 'NO CONFIGURADO'}`);
+  console.log(`   - EMAIL_PASS: ${process.env.EMAIL_PASS ? 'Configurado' : 'NO CONFIGURADO'}`);
   console.log(`📧 Asegúrate de configurar las variables de entorno EMAIL_USER y EMAIL_PASS`);
 }); 
