@@ -1,6 +1,6 @@
-import nodemailer from 'nodemailer';
+const nodemailer = require('nodemailer');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
@@ -61,6 +61,17 @@ export default async function handler(req, res) {
         <h3 style="color: #f57c00;">👤 Información del Cliente:</h3>
         <p><strong>Nombre:</strong> ${customerInfo.name}</p>
         <p><strong>Dirección:</strong> ${customerInfo.address}</p>
+      </div>
+      
+      <div style="background-color: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="color: #2e7d32;">⏰ Tiempo de Entrega Estimado:</h3>
+        <p style="font-size: 18px; font-weight: bold; color: #2e7d32;">Entre 20 minutos y 1 hora</p>
+      </div>
+      
+      <div style="background-color: #fff3e0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="color: #e65100;">📞 Información para el Cliente:</h3>
+        <p><strong>Tiempo de entrega:</strong> Entre 20 minutos y 1 hora</p>
+        <p><strong>Consultas:</strong> El cliente debe comunicarse al número que lo atendió</p>
       </div>
       
       <hr style="border: 1px solid #ddd; margin: 30px 0;">

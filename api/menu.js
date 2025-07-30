@@ -1,6 +1,6 @@
 // /api/menu.js
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   const menuItems = [
     // ⭐ PAPAS
     { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS" },

@@ -163,6 +163,13 @@ app.post('/api/order', async (req, res) => {
       <p><strong>Nombre:</strong> ${customerInfo.name}</p>
       <p><strong>Dirección:</strong> ${customerInfo.address}</p>
       
+      <h3>⏰ Tiempo de Entrega Estimado:</h3>
+      <p style="font-size: 18px; font-weight: bold; color: #2e7d32;">Entre 20 minutos y 1 hora</p>
+      
+      <h3>📞 Información para el Cliente:</h3>
+      <p><strong>Tiempo de entrega:</strong> Entre 20 minutos y 1 hora</p>
+      <p><strong>Consultas:</strong> El cliente debe comunicarse al número que lo atendió</p>
+      
       <hr>
       <p><em>Pedido recibido el ${new Date().toLocaleString('es-ES')}</em></p>
     `;
