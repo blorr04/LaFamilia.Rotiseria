@@ -243,7 +243,5 @@ app.post('/api/order', async (req, res) => {
   }
 });
 
-// Para Vercel - exportar función handler que usa la app Express
-module.exports = (req, res) => {
-  return app(req, res);
-}; 
+// Exportar la app de Express directamente para Vercel
+module.exports = app; 

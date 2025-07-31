@@ -846,3 +846,72 @@ section h2 {
     border-left-color: #667eea;
     background: linear-gradient(135deg, #f3f4ff 0%, #e8eaff 100%);
 }
+
+/* Botón flotante móvil para ir al carrito */
+.mobile-cart-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff8f00 0%, #ef6c00 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 20px;
+    box-shadow: 0 8px 25px rgba(255, 143, 0, 0.4);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.mobile-cart-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(255, 143, 0, 0.5);
+}
+
+.mobile-cart-button i {
+    font-size: 1.2rem;
+}
+
+.cart-total-mobile {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Mostrar solo en móvil */
+@media (min-width: 1024px) {
+    .mobile-cart-button {
+        display: none !important;
+    }
+}
+
+/* Ocultar en móvil cuando el carrito está visible */
+@media (max-width: 1023px) {
+    .mobile-cart-button {
+        display: flex;
+    }
+    
+    /* Ocultar cuando el usuario está en la sección del carrito */
+    .cart-section:target ~ .mobile-cart-button,
+    .mobile-cart-button.hidden {
+        display: none !important;
+    }
+}
+
+/* Animación de pulso para llamar la atención */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 8px 25px rgba(255, 143, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(255, 143, 0, 0.6);
+    }
+    100% {
+        box-shadow: 0 8px 25px rgba(255, 143, 0, 0.4);
+    }
+}

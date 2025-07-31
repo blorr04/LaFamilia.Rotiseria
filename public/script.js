@@ -16,6 +16,8 @@ const confirmationModal = document.getElementById('confirmationModal');
 const orderId = document.getElementById('orderId');
 const closeModal = document.getElementById('closeModal');
 const loadingSpinner = document.getElementById('loadingSpinner');
+const mobileCartButton = document.getElementById('mobileCartButton');
+const cartTotalMobile = document.querySelector('.cart-total-mobile');
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
@@ -138,6 +140,20 @@ function setupEventListeners() {
             resetForm();
         }
     });
+
+    // Botón móvil para ir al carrito
+    if (mobileCartButton) {
+        mobileCartButton.addEventListener('click', function() {
+            // Scroll suave al carrito
+            const cartSection = document.querySelector('.cart-section');
+            if (cartSection) {
+                cartSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
 }
 
 // Aumentar cantidad
@@ -405,6 +421,27 @@ function updateTotal() {
     });
 
     totalAmount.textContent = total.toFixed(2);
+    
+    // Actualizar botón móvil
+    updateMobileCartButton();
+}
+
+// Actualizar botón móvil del carrito
+function updateMobileCartButton() {
+    if (!mobileCartButton || !cartTotalMobile) return;
+    
+    // Actualizar total en el botón
+    cartTotalMobile.textContent = `$${total.toFixed(2)}`;
+    
+    // Mostrar/ocultar según si hay productos
+    const hasItems = cart.length > 0 || flavors.length > 0;
+    const hasTotal = total > 0;
+    
+    if (hasItems || hasTotal) {
+        mobileCartButton.style.display = 'flex';
+    } else {
+        mobileCartButton.style.display = 'none';
+    }
 }
 
 // Validar formulario
