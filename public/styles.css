@@ -7,23 +7,58 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ffd54f 0%, #ffb74d 100%);
     min-height: 100vh;
-    color: #333;
+    color: #3e2723;
     line-height: 1.6;
+    margin: 0;
+}
+
+/* Desktop background adjustments */
+@media (min-width: 1024px) {
+    body {
+        background: linear-gradient(135deg, #ffd54f 0%, #ffb74d 100%);
+        background-attachment: fixed;
+    }
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
+}
+
+/* Layout principal para desktop */
+@media (min-width: 1024px) {
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 40px;
+        align-items: start;
+    }
+    
+    .main-content {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: sticky;
+        top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 }
 
 /* Header */
 .header {
     text-align: center;
     margin-bottom: 40px;
-    color: white;
+    color: #c62828;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #ff8f00 0%, #ef6c00 100%);
+    border-bottom: 5px solid #8d4e00;
 }
 
 .header h1 {
@@ -31,11 +66,29 @@ body {
     font-weight: 700;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    color: #c62828;
 }
 
 .header p {
     font-size: 1.1rem;
     opacity: 0.9;
+    color: #3e2723;
+}
+
+/* Desktop header adjustments */
+@media (min-width: 1024px) {
+    .header {
+        padding: 60px 20px;
+        margin-bottom: 60px;
+    }
+    
+    .header h1 {
+        font-size: 3rem;
+    }
+    
+    .header p {
+        font-size: 1.3rem;
+    }
 }
 
 /* Secciones generales */
@@ -54,7 +107,7 @@ section:hover {
 }
 
 section h2 {
-    color: #667eea;
+    color: #c62828;
     margin-bottom: 20px;
     font-size: 1.5rem;
     font-weight: 600;
@@ -65,10 +118,57 @@ section h2 {
 
 /* Menú Grid */
 .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     margin-top: 20px;
+}
+
+.category-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.category-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.category-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #c62828;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, #ff8f00 0%, #ef6c00 100%);
+    color: #c62828;
+    border-radius: 10px;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+    border: 2px solid #8d4e00;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Desktop category grid improvements */
+@media (min-width: 1024px) {
+    .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .menu-item {
@@ -83,14 +183,14 @@ section h2 {
 }
 
 .menu-item:hover {
-    border-color: #667eea;
+    border-color: #ff8f00;
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 143, 0, 0.2);
 }
 
 .menu-item.selected {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #ff8f00;
+    background: linear-gradient(135deg, #ff8f00 0%, #ef6c00 100%);
     color: white;
 }
 
@@ -103,7 +203,7 @@ section h2 {
 .menu-item .price {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #667eea;
+    color: #c62828;
     margin-bottom: 15px;
 }
 
@@ -130,7 +230,7 @@ section h2 {
 }
 
 .quantity-btn {
-    background: #667eea;
+    background: #ff8f00;
     color: white;
     border: none;
     border-radius: 50%;
@@ -145,7 +245,7 @@ section h2 {
 }
 
 .quantity-btn:hover {
-    background: #5a6fd8;
+    background: #ef6c00;
     transform: scale(1.1);
 }
 
@@ -160,6 +260,34 @@ section h2 {
     background: #f8f9fa;
     border-radius: 10px;
     padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Desktop cart adjustments */
+@media (min-width: 1024px) {
+    .cart-container {
+        max-height: 500px;
+        padding: 25px;
+    }
+    
+    .cart-item {
+        padding: 12px 0;
+        font-size: 0.95rem;
+    }
+    
+    .cart-total h3 {
+        font-size: 1.3rem;
+    }
+    
+    .sidebar section {
+        padding: 20px;
+    }
+    
+    .sidebar h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
 }
 
 .cart-items {
@@ -188,19 +316,19 @@ section h2 {
 }
 
 .cart-item-price {
-    color: #667eea;
+    color: #c62828;
     font-weight: 600;
 }
 
 .cart-total {
     text-align: right;
     padding-top: 20px;
-    border-top: 2px solid #667eea;
+    border-top: 2px solid #ff8f00;
 }
 
 .cart-total h3 {
     font-size: 1.5rem;
-    color: #667eea;
+    color: #c62828;
 }
 
 .empty-cart {
@@ -270,9 +398,28 @@ section h2 {
 
 /* Formulario del cliente */
 .customer-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 20px;
+}
+
+/* Desktop form adjustments */
+@media (min-width: 1024px) {
+    .sidebar .customer-form {
+        gap: 15px;
+    }
+    
+    .sidebar .form-group input,
+    .sidebar .form-group textarea {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+    
+    .sidebar .submit-btn {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 15px;
+    }
 }
 
 .form-group {
@@ -299,7 +446,7 @@ section h2 {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #ff8f00;
 }
 
 .form-group textarea {
@@ -312,7 +459,7 @@ section h2 {
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff8f00 0%, #ef6c00 100%);
     color: white;
     border: none;
     padding: 20px 40px;
@@ -321,7 +468,7 @@ section h2 {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 25px rgba(255, 143, 0, 0.3);
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -329,7 +476,7 @@ section h2 {
 
 .submit-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 12px 35px rgba(255, 143, 0, 0.4);
 }
 
 .submit-btn:active {
@@ -378,7 +525,7 @@ section h2 {
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff8f00 0%, #ef6c00 100%);
     color: white;
     padding: 20px;
     border-radius: 15px 15px 0 0;
@@ -449,25 +596,40 @@ section h2 {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
     .container {
+        display: block !important;
         padding: 10px;
+    }
+    
+    .header {
+        padding: 30px 20px;
+        margin-bottom: 30px;
     }
     
     .header h1 {
         font-size: 2rem;
     }
     
+    .header p {
+        font-size: 1rem;
+    }
+    
     section {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-section {
         padding: 20px;
     }
     
-    .menu-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .customer-form {
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
     
     .submit-btn {
@@ -478,6 +640,17 @@ section h2 {
     .modal-content {
         margin: 10% auto;
         width: 95%;
+    }
+    
+    .sidebar {
+        position: static !important;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -526,4 +699,150 @@ section h2 {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
     border-radius: 10px;
     pointer-events: none;
-} 
+}
+
+/* Estilos para sabores de empanadas */
+.flavor-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.flavor-title h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #c62828;
+}
+
+.flavor-item {
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #ff8f00;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.flavor-item:hover {
+    background-color: #fff8e1;
+    transform: translateX(3px);
+}
+
+.flavor-name {
+    font-weight: 600;
+    color: #3e2723;
+    margin-bottom: 2px;
+}
+
+.flavor-quantity {
+    color: #c62828;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Empanadas sabores en el menú */
+.menu-item[data-category="EMPANADAS SABORES"] {
+    border-left: 4px solid #4caf50;
+    background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e8 100%);
+}
+
+.menu-item[data-category="EMPANADAS SABORES"] .price {
+    color: #4caf50;
+    font-size: 0.9rem;
+}
+
+.menu-item[data-category="EMPANADAS SABORES"] .price::after {
+    content: " (Sabor)";
+    font-size: 0.8rem;
+    font-weight: normal;
+    opacity: 0.8;
+}
+
+.menu-item[data-category="EMPANADAS SABORES"].selected {
+    background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+    border-left-color: #2e7d32;
+}
+
+/* Estilos para extras */
+.extras-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.extra-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.extra-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #667eea;
+    cursor: pointer;
+}
+
+.extra-checkbox:hover {
+    color: #667eea;
+}
+
+.extra-quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    justify-content: center;
+}
+
+.quantity-btn.small {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.quantity-btn.small:hover {
+    background: #5a6fd8;
+    transform: scale(1.1);
+}
+
+/* Estilos para extras en el carrito */
+.cart-extra {
+    font-size: 0.85rem;
+    color: #667eea;
+    margin-left: 10px;
+    font-style: italic;
+}
+
+/* Items con extras en el menú */
+.menu-item:has(.extras-section) {
+    padding-bottom: 25px;
+}
+
+/* Productos que tienen extras disponibles */
+.menu-item[data-category="PAPAS"],
+.menu-item[data-category="TORPEDO"],
+.menu-item[data-category="LOMITO"] {
+    border-left: 3px solid #ff9800;
+}
+
+.menu-item[data-category="PAPAS"]:has(.extras-section input:checked),
+.menu-item[data-category="TORPEDO"]:has(.extras-section input:checked),
+.menu-item[data-category="LOMITO"]:has(.extras-section input:checked) {
+    border-left-color: #667eea;
+    background: linear-gradient(135deg, #f3f4ff 0%, #e8eaff 100%);
+}

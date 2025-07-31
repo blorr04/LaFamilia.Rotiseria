@@ -4,53 +4,29 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// Configurar dotenv con más opciones de debug
-const result = require('dotenv').config({ 
-  path: path.join(__dirname, '.env'),
-  debug: true 
-});
-
-console.log('🔍 Debug - Resultado de dotenv:', result);
-
-// Configuración directa como fallback
-if (!process.env.EMAIL_USER) {
-  process.env.EMAIL_USER = 'lafamilia.rotiseria2@gmail.com';
-  console.log('⚠️  Usando configuración directa para EMAIL_USER');
-}
-if (!process.env.EMAIL_PASS) {
-  process.env.EMAIL_PASS = 'fwpttjmoxqhzniib';
-  console.log('⚠️  Usando configuración directa para EMAIL_PASS');
-}
-if (!process.env.PORT) {
-  process.env.PORT = '3001';
-  console.log('⚠️  Usando configuración directa para PORT');
-}
-
-// Debug: Verificar si las variables se están leyendo
-console.log('🔍 Debug - Variables de entorno:');
-console.log('   EMAIL_USER:', process.env.EMAIL_USER ? 'Configurado' : 'NO CONFIGURADO');
-console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? 'Configurado' : 'NO CONFIGURADO');
-console.log('   PORT:', process.env.PORT || 'No configurado');
+// Configurar dotenv
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+
+// Servir archivos estáticos
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Configuración del transporter de email
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'tu-email@gmail.com',
-    pass: process.env.EMAIL_PASS || 'tu-password-de-aplicacion'
+    user: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',
+    pass: process.env.EMAIL_PASS || 'fwpttjmoxqhzniib'
   }
 });
 
-// Datos del menú (puedes modificar estos productos)
+// Datos del menú
 const menuItems = [
   // ⭐ PAPAS
   { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS", hasExtras: true, extraType: "cheddar" },
@@ -140,22 +116,20 @@ const extrasConfig = {
   papas: { name: "Papas Extra", price: 2000 }
 };
 
-// Rutas
+// Ruta principal - servir el HTML
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// Obtener menú
+// Rutas de API
 app.get('/api/menu', (req, res) => {
   res.json(menuItems);
 });
 
-// Obtener configuración de extras
 app.get('/api/extras', (req, res) => {
   res.json(extrasConfig);
 });
 
-// Procesar pedido
 app.post('/api/order', async (req, res) => {
   try {
     const { items, customerInfo } = req.body;
@@ -238,8 +212,8 @@ app.post('/api/order', async (req, res) => {
 
     // Enviar email
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'tu-email@gmail.com',
-      to: process.env.EMAIL_USER || 'tu-email@gmail.com', // Email donde recibirás los pedidos
+      from: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',
+      to: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',
       subject: `🍕 Nuevo Pedido - ${customerInfo.name}`,
       html: emailContent
     };
@@ -257,7 +231,6 @@ app.post('/api/order', async (req, res) => {
   } catch (error) {
     console.error('Error al procesar pedido:', error);
     
-    // Mensaje de error más específico
     let errorMessage = 'Error al procesar el pedido. Por favor, intenta nuevamente.';
     
     if (error.code === 'EAUTH') {
@@ -270,11 +243,4 @@ app.post('/api/order', async (req, res) => {
   }
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📧 Configuración de email:`);
-  console.log(`   - EMAIL_USER: ${process.env.EMAIL_USER ? 'Configurado' : 'NO CONFIGURADO'}`);
-  console.log(`   - EMAIL_PASS: ${process.env.EMAIL_PASS ? 'Configurado' : 'NO CONFIGURADO'}`);
-  console.log(`📧 Asegúrate de configurar las variables de entorno EMAIL_USER y EMAIL_PASS`);
-}); 
+module.exports = app; 

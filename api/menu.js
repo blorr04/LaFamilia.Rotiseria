@@ -5,20 +5,18 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 module.exports = function handler(req, res) {
   const menuItems = [
     // ⭐ PAPAS
-    { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS" },
-    { id: 2, name: "Papas Grandes", price: 6000, category: "PAPAS" },
-    { id: 3, name: "Papas Grandes con Cheddar", price: 7000, category: "PAPAS" },
+    { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS", hasExtras: true, extraType: "cheddar" },
+    { id: 2, name: "Papas Grandes", price: 6000, category: "PAPAS", hasExtras: true, extraType: "cheddar" },
 
     // 🍔 HAMBURGUESA
     { id: 4, name: "Hamburguesa Común + Papas", price: 7000, category: "HAMBURGUESA" },
     { id: 5, name: "Hamburguesa Especial + Papas", price: 8500, category: "HAMBURGUESA" },
 
     // 🌭 TORPEDO
-    { id: 6, name: "Torpedo Común", price: 7500, category: "TORPEDO" },
-    { id: 7, name: "Torpedo con Hamburguesa", price: 9000, category: "TORPEDO" },
-    { id: 8, name: "Torpedo con Suprema", price: 9000, category: "TORPEDO" },
-    { id: 9, name: "Torpedo con Milanesa", price: 10000, category: "TORPEDO" },
-    { id: 10, name: "Torpedo con Milanesa + Papas Extra", price: 12000, category: "TORPEDO" },
+    { id: 6, name: "Torpedo Común", price: 7500, category: "TORPEDO", hasExtras: true, extraType: "papas" },
+    { id: 7, name: "Torpedo con Hamburguesa", price: 9000, category: "TORPEDO", hasExtras: true, extraType: "papas" },
+    { id: 8, name: "Torpedo con Suprema", price: 9000, category: "TORPEDO", hasExtras: true, extraType: "papas" },
+    { id: 9, name: "Torpedo con Milanesa", price: 10000, category: "TORPEDO", hasExtras: true, extraType: "papas" },
 
     // 🥪 CARLITO
     { id: 11, name: "Carlito Común", price: 6500, category: "CARLITO" },
@@ -41,12 +39,14 @@ module.exports = function handler(req, res) {
     // 🥟 EMPANADAS
     { id: 23, name: "Empanada (Unidad)", price: 1500, category: "EMPANADAS" },
     { id: 24, name: "Empanadas (Docena)", price: 16000, category: "EMPANADAS" },
-    { id: 25, name: "Empanada de Carne Dulce", price: 1500, category: "EMPANADAS" },
-    { id: 26, name: "Empanada de Carne Salada", price: 1500, category: "EMPANADAS" },
-    { id: 27, name: "Empanada de Jamón y Queso", price: 1500, category: "EMPANADAS" },
-    { id: 28, name: "Empanada de Pollo", price: 1500, category: "EMPANADAS" },
-    { id: 29, name: "Empanada de Verdura", price: 1500, category: "EMPANADAS" },
-    { id: 30, name: "Empanada de Humita", price: 1500, category: "EMPANADAS" },
+    
+    // SABORES DE EMPANADAS (sin precio - solo para seleccionar sabores)
+    { id: 25, name: "De Carne Dulce", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
+    { id: 26, name: "De Carne Salada", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
+    { id: 27, name: "De Jamón y Queso", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
+    { id: 28, name: "De Pollo", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
+    { id: 29, name: "De Verdura", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
+    { id: 30, name: "De Humita", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
 
     // 🍕 PIZZA (MOLDE) - 4 porciones
     { id: 31, name: "Pizza Muzzarella (molde, 4 porciones)", price: 5000, category: "PIZZA MOLDE" },
@@ -81,10 +81,9 @@ module.exports = function handler(req, res) {
     { id: 54, name: "Pizza Explosiva (parrilla, 12 porciones)", price: 18000, category: "PIZZA PARRILLA" },
 
     // 🥪 LOMITO
-    { id: 55, name: "Lomito Simple", price: 8500, category: "LOMITO" },
-    { id: 56, name: "Lomito Especial", price: 9000, category: "LOMITO" },
-    { id: 57, name: "Lomito Super", price: 10000, category: "LOMITO" },
-    { id: 58, name: "Lomito Super + Papas Extra", price: 12000, category: "LOMITO" }
+    { id: 55, name: "Lomito Simple", price: 8500, category: "LOMITO", hasExtras: true, extraType: "papas" },
+    { id: 56, name: "Lomito Especial", price: 9000, category: "LOMITO", hasExtras: true, extraType: "papas" },
+    { id: 57, name: "Lomito Super", price: 10000, category: "LOMITO", hasExtras: true, extraType: "papas" }
   ];
   res.status(200).json(menuItems);
 }

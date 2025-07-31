@@ -2,6 +2,12 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
+// Configuración de extras
+const extrasConfig = {
+  cheddar: { name: "Cheddar", price: 1000 },
+  papas: { name: "Papas Extra", price: 2000 }
+};
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
@@ -21,17 +27,38 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Debes seleccionar al menos un producto' });
   }
 
-  // Calcular total y detalles
+  // Calcular total y detalles, separar productos de sabores
   let total = 0;
   let orderDetails = '';
+  let flavorDetails = '';
 
   // Procesar productos del menú
   if (hasItems) {
     items.forEach(item => {
       if (item && item.name && item.quantity > 0 && item.price >= 0) {
-        const itemTotal = item.price * item.quantity;
-        orderDetails += `${item.name} x${item.quantity} - $${itemTotal.toFixed(2)}\n`;
-        total += itemTotal;
+        if (item.isFlavor) {
+          // Es un sabor de empanada (sin precio)
+          flavorDetails += `${item.name} x${item.quantity}\n`;
+        } else {
+          // Es un producto con precio
+          let itemTotal = item.price * item.quantity;
+          let itemDescription = `${item.name} x${item.quantity} - $${itemTotal.toFixed(2)}`;
+          
+          // Agregar extras si existen
+          if (item.extras) {
+            Object.keys(item.extras).forEach(extraType => {
+              const extraQuantity = item.extras[extraType];
+              if (extraQuantity > 0 && extrasConfig[extraType]) {
+                const extraPrice = extrasConfig[extraType].price * extraQuantity;
+                itemTotal += extraPrice;
+                itemDescription += `\n  + ${extrasConfig[extraType].name} x${extraQuantity} - $${extraPrice.toFixed(2)}`;
+              }
+            });
+          }
+          
+          total += itemTotal;
+          orderDetails += itemDescription + '\n';
+        }
       }
     });
   }
@@ -40,12 +67,23 @@ module.exports = async function handler(req, res) {
   const orderId = `PED-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
 
   // Email para el restaurante
-  const restaurantEmailContent = `
+  let restaurantEmailContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #d32f2f;">🍕 Nuevo Pedido Recibido</h2>
       <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h3 style="color: #1976d2;">📋 Detalles del Pedido:</h3>
         <pre style="background-color: white; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-family: inherit;">${orderDetails}</pre>
+  `;
+
+  // Agregar sabores de empanadas si existen
+  if (flavorDetails.trim()) {
+    restaurantEmailContent += `
+        <h3 style="color: #4caf50;">🥟 Sabores de Empanadas:</h3>
+        <pre style="background-color: #f0f8f0; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-family: inherit; border-left: 4px solid #4caf50;">${flavorDetails}</pre>
+    `;
+  }
+
+  restaurantEmailContent += `
         <h3 style="color: #388e3c;">💰 Total: $${total.toFixed(2)}</h3>
       </div>
       
