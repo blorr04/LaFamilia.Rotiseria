@@ -94,7 +94,7 @@ module.exports = async function handler(req, res) {
     `;
 
     // Configuración del transporter de email
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',

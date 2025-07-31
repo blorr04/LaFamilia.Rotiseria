@@ -20,9 +20,9 @@ const mobileCartButton = document.getElementById('mobileCartButton');
 const cartTotalMobile = document.querySelector('.cart-total-mobile');
 
 // Inicialización
-document.addEventListener('DOMContentLoaded', function() {
-    loadMenu();
-    loadExtras();
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadExtras(); // Cargar extras PRIMERO
+    await loadMenu();   // Luego cargar menú (que renderiza)
     setupEventListeners();
 });
 
