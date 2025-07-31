@@ -4,8 +4,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// Configurar dotenv
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+// Configurar dotenv para desarrollo local
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+}
 
 const app = express();
 
@@ -14,15 +16,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Servir archivos estáticos
-app.use(express.static(path.join(__dirname, '..', 'public')));
-
 // Configuración del transporter de email
-const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransporter({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',
-    pass: process.env.EMAIL_PASS || 'fwpttjmoxqhzniib'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
@@ -212,8 +211,8 @@ app.post('/api/order', async (req, res) => {
 
     // Enviar email
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',
-      to: process.env.EMAIL_USER || 'lafamilia.rotiseria2@gmail.com',
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
       subject: `🍕 Nuevo Pedido - ${customerInfo.name}`,
       html: emailContent
     };
@@ -243,4 +242,13 @@ app.post('/api/order', async (req, res) => {
   }
 });
 
-module.exports = app; 
+// Exportar para Vercel
+module.exports = app;
+
+// Para desarrollo local
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+  });
+}
