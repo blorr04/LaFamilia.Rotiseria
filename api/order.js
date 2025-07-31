@@ -87,7 +87,7 @@ module.exports = async function handler(req, res) {
       
       <h3>📞 Información para el Cliente:</h3>
       <p><strong>Tiempo de entrega:</strong> Entre 20 minutos y 1 hora</p>
-      <p><strong>Consultas:</strong> El cliente debe comunicarse al número que lo atendió</p>
+      <p><strong>Consultas:</strong> +54 9 341 552-0235</p>
       
       <hr>
       <p><em>Pedido recibido el ${new Date().toLocaleString('es-ES')}</em></p>
