@@ -4,6 +4,7 @@ let cart = []; // Productos con precio
 let flavors = []; // Sabores de empanadas (sin precio)
 let extrasConfig = {}; // Configuración de extras
 let total = 0;
+let restaurantStatus = { isOpen: true }; // Estado del restaurante
 
 // Elementos del DOM
 const menuGrid = document.getElementById('menuGrid');
@@ -21,9 +22,13 @@ const cartTotalMobile = document.querySelector('.cart-total-mobile');
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', async function() {
+    await loadRestaurantStatus(); // Verificar si está abierto
     await loadExtras(); // Cargar extras PRIMERO
     await loadMenu();   // Luego cargar menú (que renderiza)
     setupEventListeners();
+    
+    // Verificar estado cada 30 segundos
+    setInterval(loadRestaurantStatus, 30000);
 });
 
 // Cargar menú desde el servidor
@@ -35,6 +40,20 @@ async function loadMenu() {
     } catch (error) {
         console.error('Error cargando menú:', error);
         showError('Error cargando el menú. Por favor, recarga la página.');
+    }
+}
+
+// Cargar estado del restaurante
+async function loadRestaurantStatus() {
+    try {
+        const response = await fetch('/api/status');
+        restaurantStatus = await response.json();
+        updateRestaurantStatus();
+    } catch (error) {
+        console.error('Error cargando estado del restaurante:', error);
+        // Si no puede cargar el estado, asume que está abierto
+        restaurantStatus = { isOpen: true };
+        updateRestaurantStatus();
     }
 }
 
@@ -120,6 +139,9 @@ function renderMenu() {
         categorySection.appendChild(categoryGrid);
         menuGrid.appendChild(categorySection);
     });
+    
+    // Actualizar estado del botón de envío después de renderizar
+    updateSubmitButton();
 }
 
 // Configurar event listeners
@@ -426,6 +448,68 @@ function updateTotal() {
     updateMobileCartButton();
 }
 
+// Actualizar estado del restaurante en la UI
+function updateRestaurantStatus() {
+    // Remover banner existente si existe
+    const existingBanner = document.getElementById('statusBanner');
+    if (existingBanner) {
+        existingBanner.remove();
+    }
+    
+    if (!restaurantStatus.isOpen) {
+        // Crear banner de cerrado
+        const banner = document.createElement('div');
+        banner.id = 'statusBanner';
+        banner.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 1001;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        `;
+        banner.innerHTML = `
+            🔴 NO ESTAMOS RECIBIENDO PEDIDOS EN ESTE MOMENTO<br>
+            <span style="font-size: 0.9rem; opacity: 0.9;">${restaurantStatus.message || 'Vuelve pronto'}</span>
+        `;
+        
+        // Insertar al inicio del body
+        document.body.insertBefore(banner, document.body.firstChild);
+        
+        // Ajustar padding del contenido principal
+        document.body.style.paddingTop = '80px';
+    } else {
+        // Restaurante abierto - quitar padding
+        document.body.style.paddingTop = '0';
+    }
+    
+    // Actualizar estado del botón de envío
+    updateSubmitButton();
+}
+
+// Actualizar botón de envío según estado del restaurante
+function updateSubmitButton() {
+    if (!submitOrder) return;
+    
+    if (restaurantStatus.isOpen) {
+        submitOrder.disabled = false;
+        submitOrder.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Pedido';
+        submitOrder.style.opacity = '1';
+        submitOrder.style.cursor = 'pointer';
+    } else {
+        submitOrder.disabled = true;
+        submitOrder.innerHTML = '🔴 Pedidos Cerrados';
+        submitOrder.style.opacity = '0.5';
+        submitOrder.style.cursor = 'not-allowed';
+    }
+}
+
 // Actualizar botón móvil del carrito
 function updateMobileCartButton() {
     if (!mobileCartButton || !cartTotalMobile) return;
@@ -500,6 +584,12 @@ function showError(message) {
 
 // Manejar envío del pedido
 async function handleOrderSubmission() {
+    // Verificar si el restaurante está abierto
+    if (!restaurantStatus.isOpen) {
+        showError('No estamos recibiendo pedidos en este momento. Por favor, intenta más tarde.');
+        return;
+    }
+
     const errors = validateForm();
 
     if (errors.length > 0) {

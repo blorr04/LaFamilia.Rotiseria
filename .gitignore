@@ -57,4 +57,7 @@ jspm_packages/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Restaurant status file (local state)
+restaurant-status.json 
