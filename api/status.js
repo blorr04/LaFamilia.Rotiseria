@@ -1,12 +1,7 @@
 // /api/status.js - Controlar estado de pedidos
-const path = require('path');
-const fs = require('fs');
 
-// Archivo para guardar el estado
-const statusFile = path.join(__dirname, '..', 'restaurant-status.json');
-
-// Estado por defecto
-const defaultStatus = {
+// Estado en memoria (funciona en Vercel)
+let restaurantStatus = {
   isOpen: true,
   lastChanged: new Date().toISOString(),
   message: "Estamos recibiendo pedidos normalmente"
@@ -14,27 +9,13 @@ const defaultStatus = {
 
 // Leer estado actual
 function getStatus() {
-  try {
-    if (fs.existsSync(statusFile)) {
-      const data = fs.readFileSync(statusFile, 'utf-8');
-      return JSON.parse(data);
-    }
-    return defaultStatus;
-  } catch (error) {
-    console.error('Error reading status:', error);
-    return defaultStatus;
-  }
+  return restaurantStatus;
 }
 
 // Guardar estado
 function saveStatus(status) {
-  try {
-    fs.writeFileSync(statusFile, JSON.stringify(status, null, 2));
-    return true;
-  } catch (error) {
-    console.error('Error saving status:', error);
-    return false;
-  }
+  restaurantStatus = { ...status };
+  return true;
 }
 
 module.exports = function handler(req, res) {
