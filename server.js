@@ -52,86 +52,96 @@ const transporter = nodemailer.createTransport({
 
 // Datos del menú (puedes modificar estos productos)
 const menuItems = [
-  // ⭐ PAPAS
-  { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS", hasExtras: true, extraType: "cheddar" },
-  { id: 2, name: "Papas Grandes", price: 6000, category: "PAPAS", hasExtras: true, extraType: "cheddar" },
+  // 🥔 PAPAS
+  { id: 1, name: "Papas Chicas", price: 4000, category: "PAPAS", hasExtras: true, extraType: "cheddar", isActive: true },
+  { id: 2, name: "Papas Grandes", price: 6000, category: "PAPAS", hasExtras: true, extraType: "cheddar", isActive: true },
 
-  // 🍔 HAMBURGUESA
-  { id: 4, name: "Hamburguesa Común + Papas", price: 7000, category: "HAMBURGUESA" },
-  { id: 5, name: "Hamburguesa Especial + Papas", price: 8500, category: "HAMBURGUESA" },
+  // 🍔 HAMBURGUESA CASERA
+  { id: 3, name: "Hamburguesa Especial + Papas", price: 8500, category: "HAMBURGUESA CASERA", isActive: true },
+  { id: 4, name: "Hamburguesa Simple con Cheddar + Papas", price: 7000, category: "HAMBURGUESA CASERA", isActive: true },
+  { id: 5, name: "Hamburguesa Doble con Cheddar y Bacon", price: 9500, category: "HAMBURGUESA CASERA", isActive: true },
+  { id: 6, name: "Hamburguesa Mega Boom Doble", price: 10500, category: "HAMBURGUESA CASERA", isActive: true },
 
   // 🌭 TORPEDO
-  { id: 6, name: "Torpedo Común", price: 7500, category: "TORPEDO", hasExtras: true, extraType: "papas" },
-  { id: 7, name: "Torpedo con Hamburguesa", price: 9000, category: "TORPEDO", hasExtras: true, extraType: "papas" },
-  { id: 8, name: "Torpedo con Suprema", price: 9000, category: "TORPEDO", hasExtras: true, extraType: "papas" },
-  { id: 9, name: "Torpedo con Milanesa", price: 10000, category: "TORPEDO", hasExtras: true, extraType: "papas" },
+  { id: 7, name: "Torpedo Común", price: 8000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 8, name: "Torpedo Común + Hamburguesa", price: 10000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 9, name: "Torpedo Común + Suprema", price: 10000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 10, name: "Torpedo Común + Milanesa", price: 11000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 11, name: "Torpedo Especial", price: 8500, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 12, name: "Torpedo Especial + Hamburguesa", price: 10000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 13, name: "Torpedo Especial + Suprema", price: 9000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 14, name: "Torpedo Especial + Milanesa", price: 10000, category: "TORPEDO", hasExtras: true, extraType: "papas", isActive: true },
 
   // 🥪 CARLITO
-  { id: 11, name: "Carlito Común", price: 6500, category: "CARLITO" },
-  { id: 12, name: "Carlito Especial", price: 7500, category: "CARLITO" },
-  { id: 13, name: "Carlito de Pollo", price: 8000, category: "CARLITO" },
-  { id: 14, name: "Carlipizza", price: 8000, category: "CARLITO" },
+  { id: 15, name: "Carlito Común", price: 6500, category: "CARLITO", isActive: true },
+  { id: 16, name: "Carlito Especial", price: 7500, category: "CARLITO", isActive: true },
+  { id: 17, name: "Carlito de Pollo", price: 8500, category: "CARLITO", isActive: true },
+  { id: 18, name: "Carlipizza", price: 9500, category: "CARLITO", isActive: true },
 
   // 🍕 PIZZANESA + PAPAS (Para 2 personas)
-  { id: 15, name: "Pizzanesa de Pollo + Papas (Para 2)", price: 18000, category: "PIZZANESA + PAPAS" },
-  { id: 16, name: "Pizzanesa de Carne + Papas (Para 2)", price: 20000, category: "PIZZANESA + PAPAS" },
-  { id: 17, name: "Explosiva de Pollo + Papas (Para 2)", price: 22000, category: "PIZZANESA + PAPAS" },
-  { id: 18, name: "Explosiva de Carne + Papas (Para 2)", price: 24000, category: "PIZZANESA + PAPAS" },
+  { id: 19, name: "Pizzanesa de Pollo (Muzza) Para 2", price: 20000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 20, name: "Pizzanesa de Carne (Muzza) Para 2", price: 21000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 21, name: "Pizzanesa Especial de Pollo Para 2", price: 22000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 22, name: "Pizzanesa Especial de Carne Para 2", price: 23000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 23, name: "Pizzanesa Explosiva de Pollo Para 2", price: 24000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 24, name: "Pizzanesa Explosiva de Carne Para 2", price: 25000, category: "PIZZANESA + PAPAS", isActive: true },
 
   // 🍕 PIZZANESA + PAPAS (Para 4 personas)
-  { id: 19, name: "Pizzanesa de Pollo + Papas (Para 4)", price: 20000, category: "PIZZANESA + PAPAS" },
-  { id: 20, name: "Pizzanesa de Carne + Papas (Para 4)", price: 24000, category: "PIZZANESA + PAPAS" },
-  { id: 21, name: "Explosiva de Pollo + Papas (Para 4)", price: 24000, category: "PIZZANESA + PAPAS" },
-  { id: 22, name: "Explosiva de Carne + Papas (Para 4)", price: 26000, category: "PIZZANESA + PAPAS" },
+  { id: 25, name: "Pizzanesa de Pollo (Muzza) Para 4", price: 22000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 26, name: "Pizzanesa de Carne (Muzza) Para 4", price: 23000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 27, name: "Pizzanesa Especial de Pollo Para 4", price: 24000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 28, name: "Pizzanesa Especial de Carne Para 4", price: 25000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 29, name: "Pizzanesa Explosiva de Pollo Para 4", price: 26000, category: "PIZZANESA + PAPAS", isActive: true },
+  { id: 30, name: "Pizzanesa Explosiva de Carne Para 4", price: 28000, category: "PIZZANESA + PAPAS", isActive: true },
 
   // 🥟 EMPANADAS
-  { id: 23, name: "Empanada (Unidad)", price: 1500, category: "EMPANADAS" },
-  { id: 24, name: "Empanadas (Docena)", price: 16000, category: "EMPANADAS" },
+  { id: 31, name: "Empanada (Unidad)", price: 1500, category: "EMPANADAS", isActive: true },
+  { id: 32, name: "Empanadas (Docena)", price: 16000, category: "EMPANADAS", isActive: true },
   
   // SABORES DE EMPANADAS (sin precio - solo para seleccionar sabores)
-  { id: 25, name: "De Carne Dulce", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
-  { id: 26, name: "De Carne Salada", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
-  { id: 27, name: "De Jamón y Queso", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
-  { id: 28, name: "De Pollo", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
-  { id: 29, name: "De Verdura", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
-  { id: 30, name: "De Humita", price: 0, category: "EMPANADAS SABORES", isFlavor: true },
+  { id: 33, name: "De Carne Dulce", price: 0, category: "EMPANADAS SABORES", isFlavor: true, isActive: true },
+  { id: 34, name: "De Carne Salada", price: 0, category: "EMPANADAS SABORES", isFlavor: true, isActive: true },
+  { id: 35, name: "De Jamón y Queso", price: 0, category: "EMPANADAS SABORES", isFlavor: true, isActive: true },
+  { id: 36, name: "De Pollo", price: 0, category: "EMPANADAS SABORES", isFlavor: true, isActive: true },
+  { id: 37, name: "De Verdura", price: 0, category: "EMPANADAS SABORES", isFlavor: true, isActive: true },
+  { id: 38, name: "De Humita", price: 0, category: "EMPANADAS SABORES", isFlavor: true, isActive: true },
 
-  // 🍕 PIZZA (MOLDE) - 4 porciones
-  { id: 31, name: "Pizza Muzzarella (molde, 4 porciones)", price: 5000, category: "PIZZA MOLDE" },
-  { id: 32, name: "Pizza Especial (molde, 4 porciones)", price: 6500, category: "PIZZA MOLDE" },
-  { id: 33, name: "Pizza Napolitana (molde, 4 porciones)", price: 6500, category: "PIZZA MOLDE" },
-  { id: 34, name: "Pizza Pollo a la Crema (molde, 4 porciones)", price: 7500, category: "PIZZA MOLDE" },
-  { id: 35, name: "Pizza Roquefort (molde, 4 porciones)", price: 6500, category: "PIZZA MOLDE" },
-  { id: 36, name: "Pizza Explosiva (molde, 4 porciones)", price: 8000, category: "PIZZA MOLDE" },
+  // 🍕 PIZZA (MOLDE) - Media
+  { id: 39, name: "Pizza Muzzarella (molde, Media)", price: 5000, category: "PIZZA MOLDE", isActive: true },
+  { id: 40, name: "Pizza Especial (molde, Media)", price: 6500, category: "PIZZA MOLDE", isActive: true },
+  { id: 41, name: "Pizza Napolitana (molde, Media)", price: 6500, category: "PIZZA MOLDE", isActive: true },
+  { id: 42, name: "Pizza Pollo a la Crema (molde, Media)", price: 8000, category: "PIZZA MOLDE", isActive: true },
+  { id: 43, name: "Pizza Roquefort (molde, Media)", price: 6500, category: "PIZZA MOLDE", isActive: true },
+  { id: 44, name: "Pizza Explosiva (molde, Media)", price: 8500, category: "PIZZA MOLDE", isActive: true },
 
-  // 🍕 PIZZA (MOLDE) - 8 porciones
-  { id: 37, name: "Pizza Muzzarella (molde, 8 porciones)", price: 8500, category: "PIZZA MOLDE" },
-  { id: 38, name: "Pizza Especial (molde, 8 porciones)", price: 10000, category: "PIZZA MOLDE" },
-  { id: 39, name: "Pizza Napolitana (molde, 8 porciones)", price: 12000, category: "PIZZA MOLDE" },
-  { id: 40, name: "Pizza Pollo a la Crema (molde, 8 porciones)", price: 14000, category: "PIZZA MOLDE" },
-  { id: 41, name: "Pizza Roquefort (molde, 8 porciones)", price: 12000, category: "PIZZA MOLDE" },
-  { id: 42, name: "Pizza Explosiva (molde, 8 porciones)", price: 16000, category: "PIZZA MOLDE" },
+  // 🍕 PIZZA (MOLDE) - Entera
+  { id: 45, name: "Pizza Muzzarella (molde, Entera)", price: 9000, category: "PIZZA MOLDE", isActive: true },
+  { id: 46, name: "Pizza Especial (molde, Entera)", price: 10500, category: "PIZZA MOLDE", isActive: true },
+  { id: 47, name: "Pizza Napolitana (molde, Entera)", price: 10500, category: "PIZZA MOLDE", isActive: true },
+  { id: 48, name: "Pizza Pollo a la Crema (molde, Entera)", price: 15000, category: "PIZZA MOLDE", isActive: true },
+  { id: 49, name: "Pizza Roquefort (molde, Entera)", price: 12000, category: "PIZZA MOLDE", isActive: true },
+  { id: 50, name: "Pizza Explosiva (molde, Entera)", price: 16000, category: "PIZZA MOLDE", isActive: true },
 
-  // 🍕 PIZZA (PARRILLA) - 6 porciones
-  { id: 43, name: "Pizza Muzzarella (parrilla, 6 porciones)", price: 5500, category: "PIZZA PARRILLA" },
-  { id: 44, name: "Pizza Especial (parrilla, 6 porciones)", price: 7000, category: "PIZZA PARRILLA" },
-  { id: 45, name: "Pizza Napolitana (parrilla, 6 porciones)", price: 7000, category: "PIZZA PARRILLA" },
-  { id: 46, name: "Pizza Pollo a la Crema (parrilla, 6 porciones)", price: 8000, category: "PIZZA PARRILLA" },
-  { id: 47, name: "Pizza Roquefort (parrilla, 6 porciones)", price: 7000, category: "PIZZA PARRILLA" },
-  { id: 48, name: "Pizza Explosiva (parrilla, 6 porciones)", price: 9500, category: "PIZZA PARRILLA" },
+  // 🍕 PIZZA (PARRILLA) - Media
+  { id: 51, name: "Pizza Muzzarella (parrilla, Media)", price: 6000, category: "PIZZA PARRILLA", isActive: true },
+  { id: 52, name: "Pizza Especial (parrilla, Media)", price: 7500, category: "PIZZA PARRILLA", isActive: true },
+  { id: 53, name: "Pizza Napolitana (parrilla, Media)", price: 7500, category: "PIZZA PARRILLA", isActive: true },
+  { id: 54, name: "Pizza Pollo a la Crema (parrilla, Media)", price: 8500, category: "PIZZA PARRILLA", isActive: true },
+  { id: 55, name: "Pizza Roquefort (parrilla, Media)", price: 7500, category: "PIZZA PARRILLA", isActive: true },
+  { id: 56, name: "Pizza Explosiva (parrilla, Media)", price: 9500, category: "PIZZA PARRILLA", isActive: true },
 
-  // 🍕 PIZZA (PARRILLA) - 12 porciones
-  { id: 49, name: "Pizza Muzzarella (parrilla, 12 porciones)", price: 9000, category: "PIZZA PARRILLA" },
-  { id: 50, name: "Pizza Especial (parrilla, 12 porciones)", price: 12000, category: "PIZZA PARRILLA" },
-  { id: 51, name: "Pizza Napolitana (parrilla, 12 porciones)", price: 14000, category: "PIZZA PARRILLA" },
-  { id: 52, name: "Pizza Pollo a la Crema (parrilla, 12 porciones)", price: 15000, category: "PIZZA PARRILLA" },
-  { id: 53, name: "Pizza Roquefort (parrilla, 12 porciones)", price: 14000, category: "PIZZA PARRILLA" },
-  { id: 54, name: "Pizza Explosiva (parrilla, 12 porciones)", price: 18000, category: "PIZZA PARRILLA" },
+  // 🍕 PIZZA (PARRILLA) - Entera
+  { id: 57, name: "Pizza Muzzarella (parrilla, Entera)", price: 10000, category: "PIZZA PARRILLA", isActive: true },
+  { id: 58, name: "Pizza Especial (parrilla, Entera)", price: 12500, category: "PIZZA PARRILLA", isActive: true },
+  { id: 59, name: "Pizza Napolitana (parrilla, Entera)", price: 13000, category: "PIZZA PARRILLA", isActive: true },
+  { id: 60, name: "Pizza Pollo a la Crema (parrilla, Entera)", price: 16000, category: "PIZZA PARRILLA", isActive: true },
+  { id: 61, name: "Pizza Roquefort (parrilla, Entera)", price: 14000, category: "PIZZA PARRILLA", isActive: true },
+  { id: 62, name: "Pizza Explosiva (parrilla, Entera)", price: 18500, category: "PIZZA PARRILLA", isActive: true },
 
-  // 🥪 LOMITO
-  { id: 55, name: "Lomito Simple", price: 8500, category: "LOMITO", hasExtras: true, extraType: "papas" },
-  { id: 56, name: "Lomito Especial", price: 9000, category: "LOMITO", hasExtras: true, extraType: "papas" },
-  { id: 57, name: "Lomito Super", price: 10000, category: "LOMITO", hasExtras: true, extraType: "papas" }
+  // 🥩 LOMITO
+  { id: 63, name: "Lomito Simple", price: 8500, category: "LOMITO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 64, name: "Lomito Especial", price: 9000, category: "LOMITO", hasExtras: true, extraType: "papas", isActive: true },
+  { id: 65, name: "Lomito Super", price: 10000, category: "LOMITO", hasExtras: true, extraType: "papas", isActive: true }
 ];
 
 // Configuración de extras
@@ -145,8 +155,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Obtener menú
+// Obtener menú (solo productos activos)
 app.get('/api/menu', (req, res) => {
+  const activeItems = menuItems.filter(item => item.isActive !== false);
+  res.json(activeItems);
+});
+
+// Obtener menú completo (para admin)
+app.get('/api/menu/admin', (req, res) => {
   res.json(menuItems);
 });
 
@@ -303,6 +319,61 @@ app.post('/api/status', (req, res) => {
   res.json({ success: true, status: restaurantStatus });
 });
 
+// Rutas para gestión de productos (admin)
+app.post('/api/menu/toggle', (req, res) => {
+  const { password, productId, isActive } = req.body;
+  
+  // Verificar contraseña
+  if (password !== 'pancito1954') {
+    return res.status(401).json({ error: 'Contraseña incorrecta' });
+  }
+  
+  // Buscar producto
+  const product = menuItems.find(item => item.id === productId);
+  if (!product) {
+    return res.status(404).json({ error: 'Producto no encontrado' });
+  }
+  
+  // Actualizar estado
+  product.isActive = isActive;
+  
+  console.log(`🎛️ Producto ${product.name} ${isActive ? 'ACTIVADO' : 'DESACTIVADO'} - ${new Date().toLocaleString('es-ES')}`);
+  
+  res.json({ 
+    success: true, 
+    message: `Producto ${isActive ? 'activado' : 'desactivado'} correctamente`,
+    product: product
+  });
+});
+
+app.post('/api/menu/update', (req, res) => {
+  const { password, productId, updates } = req.body;
+  
+  // Verificar contraseña
+  if (password !== 'pancito1954') {
+    return res.status(401).json({ error: 'Contraseña incorrecta' });
+  }
+  
+  // Buscar producto
+  const product = menuItems.find(item => item.id === productId);
+  if (!product) {
+    return res.status(404).json({ error: 'Producto no encontrado' });
+  }
+  
+  // Actualizar campos permitidos
+  if (updates.name !== undefined) product.name = updates.name;
+  if (updates.price !== undefined) product.price = updates.price;
+  if (updates.category !== undefined) product.category = updates.category;
+  
+  console.log(`🎛️ Producto ${product.name} actualizado - ${new Date().toLocaleString('es-ES')}`);
+  
+  res.json({ 
+    success: true, 
+    message: 'Producto actualizado correctamente',
+    product: product
+  });
+});
+
 // Panel de administración
 app.get('/admin', (req, res) => {
   const adminHTML = `
@@ -322,9 +393,6 @@ app.get('/admin', (req, res) => {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #ffd54f 0%, #ffb74d 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
         }
         .admin-container {
@@ -332,8 +400,9 @@ app.get('/admin', (req, res) => {
             border-radius: 15px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 500px;
+            max-width: 1200px;
             width: 100%;
+            margin: 0 auto;
         }
         .admin-title {
             text-align: center;
@@ -384,7 +453,6 @@ app.get('/admin', (req, res) => {
             border-color: #ff8f00;
         }
         .btn {
-            width: 100%;
             padding: 15px;
             border: none;
             border-radius: 8px;
@@ -395,6 +463,7 @@ app.get('/admin', (req, res) => {
             transition: all 0.3s ease;
         }
         .btn-login {
+            width: 100%;
             background: #ff8f00;
             color: white;
         }
@@ -404,6 +473,8 @@ app.get('/admin', (req, res) => {
         .btn-open {
             background: #4caf50;
             color: white;
+            width: 48%;
+            margin-right: 2%;
         }
         .btn-open:hover {
             background: #388e3c;
@@ -411,12 +482,27 @@ app.get('/admin', (req, res) => {
         .btn-close {
             background: #f44336;
             color: white;
+            width: 48%;
+            margin-left: 2%;
         }
         .btn-close:hover {
             background: #d32f2f;
         }
+        .btn-menu {
+            background: #2196f3;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-menu:hover {
+            background: #1976d2;
+        }
         .admin-panel {
             display: none;
+        }
+        .menu-panel {
+            display: none;
+            margin-top: 30px;
         }
         .last-changed {
             text-align: center;
@@ -440,6 +526,98 @@ app.get('/admin', (req, res) => {
             margin-bottom: 20px;
             text-align: center;
         }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .menu-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        .menu-item.inactive {
+            background: #ffebee;
+            opacity: 0.7;
+        }
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .menu-item-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .menu-item-price {
+            color: #c62828;
+            font-weight: bold;
+        }
+        .menu-item-category {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .menu-item-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        .btn-toggle {
+            background: #ff9800;
+            color: white;
+        }
+        .btn-toggle:hover {
+            background: #f57c00;
+        }
+        .btn-toggle.inactive {
+            background: #4caf50;
+        }
+        .btn-toggle.inactive:hover {
+            background: #388e3c;
+        }
+        .btn-edit {
+            background: #2196f3;
+            color: white;
+        }
+        .btn-edit:hover {
+            background: #1976d2;
+        }
+        .edit-form {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .edit-form input {
+            margin-bottom: 10px;
+        }
+        .btn-save {
+            background: #4caf50;
+            color: white;
+            width: 100%;
+        }
+        .btn-save:hover {
+            background: #388e3c;
+        }
+        .btn-cancel {
+            background: #f44336;
+            color: white;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .btn-cancel:hover {
+            background: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -461,10 +639,22 @@ app.get('/admin', (req, res) => {
                 <div id="statusText">Cargando...</div>
             </div>
             
-            <button class="btn btn-open" onclick="toggleStatus(true)">🟢 ABRIR PEDIDOS</button>
-            <button class="btn btn-close" onclick="toggleStatus(false)">🔴 CERRAR PEDIDOS</button>
+            <div style="display: flex; justify-content: space-between;">
+                <button class="btn btn-open" onclick="toggleStatus(true)">🟢 ABRIR PEDIDOS</button>
+                <button class="btn btn-close" onclick="toggleStatus(false)">🔴 CERRAR PEDIDOS</button>
+            </div>
+            
+            <button class="btn btn-menu" onclick="toggleMenuPanel()">📋 GESTIONAR MENÚ</button>
             
             <div id="lastChanged" class="last-changed"></div>
+        </div>
+        
+        <!-- Menu Panel -->
+        <div id="menuPanel" class="menu-panel">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #c62828;">📋 Gestión de Menú</h2>
+            <div id="menuGrid" class="menu-grid">
+                <!-- Los productos se cargarán aquí -->
+            </div>
         </div>
         
         <div id="message"></div>
@@ -472,6 +662,7 @@ app.get('/admin', (req, res) => {
 
     <script>
         let currentPassword = '';
+        let menuItems = [];
         
         // Verificar estado al cargar
         window.onload = function() {
@@ -486,6 +677,7 @@ app.get('/admin', (req, res) => {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 loadStatus();
+                loadMenu();
             } else {
                 showMessage('Contraseña incorrecta', 'error');
             }
@@ -500,6 +692,52 @@ app.get('/admin', (req, res) => {
             } catch (error) {
                 showMessage('Error cargando estado', 'error');
             }
+        }
+        
+        // Cargar menú completo
+        async function loadMenu() {
+            try {
+                const response = await fetch('/api/menu/admin');
+                menuItems = await response.json();
+                renderMenu();
+            } catch (error) {
+                showMessage('Error cargando menú', 'error');
+            }
+        }
+        
+        // Renderizar menú
+        function renderMenu() {
+            const menuGrid = document.getElementById('menuGrid');
+            menuGrid.innerHTML = '';
+            
+            menuItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = \`menu-item \${item.isActive ? '' : 'inactive'}\`;
+                itemDiv.innerHTML = \`
+                    <div class="menu-item-header">
+                        <span class="menu-item-name">\${item.name}</span>
+                        <span class="menu-item-price">$\${item.price}</span>
+                    </div>
+                    <div class="menu-item-category">\${item.category}</div>
+                    <div class="menu-item-controls">
+                        <button class="btn btn-small btn-toggle \${item.isActive ? '' : 'inactive'}" 
+                                onclick="toggleProduct(\${item.id}, \${!item.isActive})">
+                            \${item.isActive ? '❌ Desactivar' : '✅ Activar'}
+                        </button>
+                        <button class="btn btn-small btn-edit" onclick="toggleEditForm(\${item.id})">
+                            ✏️ Editar
+                        </button>
+                    </div>
+                    <div id="editForm-\${item.id}" class="edit-form">
+                        <input type="text" id="name-\${item.id}" value="\${item.name}" placeholder="Nombre">
+                        <input type="number" id="price-\${item.id}" value="\${item.price}" placeholder="Precio">
+                        <input type="text" id="category-\${item.id}" value="\${item.category}" placeholder="Categoría">
+                        <button class="btn btn-save" onclick="saveProduct(\${item.id})">💾 Guardar</button>
+                        <button class="btn btn-cancel" onclick="toggleEditForm(\${item.id})">❌ Cancelar</button>
+                    </div>
+                \`;
+                menuGrid.appendChild(itemDiv);
+            });
         }
         
         // Cambiar estado
@@ -527,6 +765,94 @@ app.get('/admin', (req, res) => {
             } catch (error) {
                 showMessage('Error de conexión', 'error');
             }
+        }
+        
+        // Toggle producto
+        async function toggleProduct(productId, isActive) {
+            try {
+                const response = await fetch('/api/menu/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: currentPassword,
+                        productId: productId,
+                        isActive: isActive
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Actualizar el item en el array local
+                    const item = menuItems.find(i => i.id === productId);
+                    if (item) {
+                        item.isActive = isActive;
+                    }
+                    renderMenu();
+                    showMessage(result.message, 'success');
+                } else {
+                    showMessage(result.error || 'Error al cambiar estado del producto', 'error');
+                }
+            } catch (error) {
+                showMessage('Error de conexión', 'error');
+            }
+        }
+        
+        // Toggle formulario de edición
+        function toggleEditForm(productId) {
+            const form = document.getElementById(\`editForm-\${productId}\`);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Guardar producto
+        async function saveProduct(productId) {
+            try {
+                const name = document.getElementById(\`name-\${productId}\`).value;
+                const price = parseInt(document.getElementById(\`price-\${productId}\`).value);
+                const category = document.getElementById(\`category-\${productId}\`).value;
+                
+                const response = await fetch('/api/menu/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: currentPassword,
+                        productId: productId,
+                        updates: {
+                            name: name,
+                            price: price,
+                            category: category
+                        }
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Actualizar el item en el array local
+                    const item = menuItems.find(i => i.id === productId);
+                    if (item) {
+                        item.name = name;
+                        item.price = price;
+                        item.category = category;
+                    }
+                    renderMenu();
+                    showMessage(result.message, 'success');
+                } else {
+                    showMessage(result.error || 'Error al actualizar producto', 'error');
+                }
+            } catch (error) {
+                showMessage('Error de conexión', 'error');
+            }
+        }
+        
+        // Toggle panel de menú
+        function toggleMenuPanel() {
+            const menuPanel = document.getElementById('menuPanel');
+            menuPanel.style.display = menuPanel.style.display === 'none' ? 'block' : 'none';
         }
         
         // Actualizar display de estado
